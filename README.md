@@ -1,4 +1,4 @@
-Setup Debian Wheezy server
+Setup Debian Stretch server
 ==========================
 
 Run from root
