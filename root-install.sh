@@ -7,7 +7,7 @@ aptitude upgrade
 
 echo "=== INSTALL PACKAGES"
 # core
-aptitude install -y sudo screen curl htop cron mc ranger mosh wrk rsync
+aptitude install -y sudo tmux curl htop cron mc ranger mosh wrk rsync
 
 # web
 aptitude install -y nginx supervisor

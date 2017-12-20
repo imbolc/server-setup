@@ -17,14 +17,11 @@ python3 -m venv py3env
 ./py3env/bin/pip install -r requirements.txt
 
 
-echo "=== Enable sudo autocomplete, vim-like comand line, screen tabs auto-naming"
+echo "=== Enable sudo autocomplete, vim-like comand line"
 cat >> ~/.bashrc << EOF
 
 # sudo autocomplete
 complete -cf sudo
-
-# vim colors in screen
-export TERM='xterm-256color'
 
 # vim-like comand line
 set -o vi
@@ -32,9 +29,6 @@ set -o vi
 # vim as default editor
 export VISUAL=vim
 export EDITOR="$VISUAL"
-
-# auto-change tabname in screen
-export PROMPT_COMMAND='echo -ne "\033k\033\0134"'
 
 # set PATH so it includes user's private bin if it exists
 if [ -d "$HOME/bin" ] ; then
@@ -48,32 +42,40 @@ alias nginx-restart="sudo nginx -t && sudo /etc/init.d/nginx restart"
 alias upgrade="sudo aptitude update; sudo aptitude upgrade"
 alias chmod-standard="find ./ -type d | xargs chmod -v 755 ; find ./ -type f | xargs chmod -v 644"
 alias rm-pyc-files="find . -name '*.pyc' -exec rm '{}' ';'"
-alias vim="nvim"
 EOF
 
-echo "=== Screen"
-cat >> ~/.screenrc << EOF
-startup_message off
-defutf8 on
-vbell on
+echo "=== Tmux"
+cat >> ~/.tmux.conf << EOF
+# Remap prefix from 'C-b' to 'C-a'
+unbind C-b
+set-option -g prefix C-a
+bind-key C-a last-window
+bind-key C-c new-window
 
-# vim colors
-term xterm-256color
-attrcolor b ".I"
-termcapinfo xterm 'Co#256:AB=\E[48;5;%dm:AF=\E38;5;%dm'
-defbce "on"
+# Disable mouse mode
+set -g mouse off
 
-# default buffer of scroll
-defscrollback 1000
+# Use vi key bindings
+set -g status-keys vi
+setw -g mode-keys vi
 
-# activate xterm scroll
-termcapinfo xterm* ti@:te@
+# Reload config file
+bind r source-file ~/.tmux.conf \; display-message 'Configuration reloaded!'
 
-# Строка состояния
-# для авто-названий табов в ~/.bashrc включить:
-# export PROMPT_COMMAND='echo -ne "\033k\033\0134"'
-shelltitle "$ |bash"
-hardstatus alwayslastline "%-w%{= BW}%50>%n %t%{-}%+w%<"
+# Upgrade Terminal to 256-Color Mode
+set -g default-terminal "screen-256color"
+
+# Start numbering at 1
+set -g base-index 1
+
+# Allows for faster key repetition
+set -s escape-time 0
+EOF
+
+echo "=== .inputrc"
+cat >> ~/.inputrc << EOF
+set editing-mode vi
+set enable-bracketed-paste on
 EOF
 
 echo "=== Git config"
