@@ -2,7 +2,7 @@
 
 apt-get install -y aptitude
 aptitude update
-aptitude -y upgrade
+aptitude upgrade -y
 
 
 echo "=== INSTALL PACKAGES"
