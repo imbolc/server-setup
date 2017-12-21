@@ -56,6 +56,6 @@ Install python
 
 Install postgres
 ----------------
-sudo aptitude update
-sudo aptitude install postgresql-9.6 postgresql-server-dev-9.6
-sudo su postgres -c "cd /; createuser -s user"
+    sudo aptitude update
+    sudo aptitude install postgresql-9.6 postgresql-server-dev-9.6
+    sudo su postgres -c "cd /; createuser -s user"
