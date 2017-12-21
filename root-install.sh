@@ -63,3 +63,7 @@ python3 -m venv py3env
 
 update-alternatives --install /usr/bin/vim vim /usr/bin/nvim 60
 update-alternatives --install /usr/bin/editor editor /usr/bin/nvim 60
+
+echo "=== NODE"
+curl -sL https://deb.nodesource.com/setup_9.x | sudo -E bash -
+sudo aptitude install -y nodejs
