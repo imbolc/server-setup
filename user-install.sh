@@ -59,14 +59,8 @@ set -g mouse off
 set -g status-keys vi
 setw -g mode-keys vi
 
-# Reload config file
-bind r source-file ~/.tmux.conf \; display-message 'Configuration reloaded!'
-
 # Upgrade Terminal to 256-Color Mode
 set -g default-terminal "screen-256color"
-
-# Start numbering at 1
-set -g base-index 1
 
 # Allows for faster key repetition
 set -s escape-time 0
