@@ -42,6 +42,21 @@ alias nginx-restart="sudo nginx -t && sudo /etc/init.d/nginx restart"
 alias upgrade="sudo aptitude update; sudo aptitude upgrade"
 alias chmod-standard="find ./ -type d | xargs chmod -v 755 ; find ./ -type f | xargs chmod -v 644"
 alias rm-pyc-files="find . -name '*.pyc' -exec rm '{}' ';'"
+
+# Use a long listing format
+alias ll='ls -la'
+
+# Show hidden files
+alias l.='ls -d .* --color=auto'
+
+alias untar='tar -zxvf'
+alias untar-bz='tar -jxvf'
+
+# System updates
+alias ls='ls --color=auto'
+alias df='df -H'
+alias du='du -chs * | sort -h'
+alias rsync='rsync -rPh --info=progress2'
 EOF
 
 echo "=== Tmux"
