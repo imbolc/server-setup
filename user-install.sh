@@ -38,10 +38,8 @@ EOF
 
 echo "=== Bash aliases"
 cat >> ~/.bash_aliases << EOF
-alias nginx-restart="sudo nginx -t && sudo /etc/init.d/nginx restart"
+alias restart-nginx="sudo nginx -t && sudo /etc/init.d/nginx restart"
 alias upgrade="sudo aptitude update; sudo aptitude upgrade"
-alias chmod-standard="find ./ -type d | xargs chmod -v 755 ; find ./ -type f | xargs chmod -v 644"
-alias rm-pyc-files="find . -name '*.pyc' -exec rm '{}' ';'"
 
 # Use a long listing format
 alias ll='ls -la'
@@ -84,7 +82,6 @@ EOF
 echo "=== .inputrc"
 cat >> ~/.inputrc << EOF
 set editing-mode vi
-set enable-bracketed-paste on
 EOF
 
 echo "=== Git config"
