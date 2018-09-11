@@ -15,7 +15,7 @@ apt install -y nginx supervisor
 apt install -y gcc build-essential
 
 # python extensions
-aptitude install -y libssl-dev libbz2-dev libreadline-dev libsqlite3-dev libffi-dev zlib1g-dev tk-dev libncurses5-dev libxml2-dev libxmlsec1-dev
+apt install -y libssl-dev libbz2-dev libreadline-dev libsqlite3-dev libffi-dev zlib1g-dev tk-dev libncurses5-dev libxml2-dev libxmlsec1-dev
 
 # build PIL from source
 apt install -y libjpeg-dev libfreetype6-dev
