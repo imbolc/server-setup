@@ -6,7 +6,7 @@ apt upgrade -y
 
 echo "=== INSTALL PACKAGES"
 # core
-apt install -y sudo tmux curl htop cron mc ranger mosh wrk rsync
+apt install -y sudo tmux curl htop cron mc ranger mosh wrk rsync ntp
 
 # web
 apt install -y nginx supervisor
