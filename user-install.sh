@@ -40,6 +40,7 @@ echo "=== Bash aliases"
 cat >> ~/.bash_aliases << EOF
 alias restart-nginx="sudo nginx -t && sudo /etc/init.d/nginx restart"
 alias upgrade="sudo apt update; sudo apt upgrade"
+alias supervisor="sudo supervisorctl"
 
 # Use a long listing format
 alias ll='ls -la'
