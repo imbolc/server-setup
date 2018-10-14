@@ -85,6 +85,11 @@ cat >> ~/.inputrc << EOF
 set editing-mode vi
 EOF
 
+echo "=== .psqlrc"
+cat >> ~/.psqlrc << EOF
+\x auto
+EOF
+
 echo "=== Git config"
 git config --global user.name $(whoami)
 git config --global user.email $(whoami)@$(hostname)
