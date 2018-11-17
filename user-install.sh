@@ -109,3 +109,11 @@ if [ -d "${PYENV_ROOT}" ]; then
   eval "$(pyenv init -)"
 fi
 EOF
+
+echo "=== ipython"
+pip install ipython
+ipython profile create
+cat >> ~/.ipython/profile_default/ipython_config.py << EOF
+c.TerminalInteractiveShell.editing_mode = 'vi'
+EOF
+
