@@ -43,7 +43,7 @@ alias upgrade="sudo apt update; sudo apt upgrade"
 alias supervisor="sudo supervisorctl"
 
 # Use a long listing format
-alias ll='ls -la'
+alias ll='ls -laFh'
 
 # Show hidden files
 alias l.='ls -d .* --color=auto'
@@ -112,7 +112,7 @@ EOF
 
 echo "=== ipython"
 pip install ipython
-ipython profile create
+python -m IPython profile create
 cat >> ~/.ipython/profile_default/ipython_config.py << EOF
 c.TerminalInteractiveShell.editing_mode = 'vi'
 EOF
