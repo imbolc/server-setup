@@ -5,13 +5,11 @@ Run from root
 -------------
     # cd && wget --no-check-certificate https://raw.github.com/imbolc/stretch-setup/master/root-install.sh && bash root-install.sh
 
-Create user
------------
-    # adduser user
-
-Add them into `sudo` group: `# usermod -a -G sudo user`
-Change `/etc/sudoers` with `visudo` to remove password input:
-`%sudo   ALL=(ALL) NOPASSWD: ALL`
+Non-root user
+-------------
+- Add a user: `adduser user`
+- Add them into `sudo` group: `# usermod -a -G sudo user`
+- Change `/etc/sudoers` with `visudo` to disable password input: `%sudo   ALL=(ALL) NOPASSWD: ALL`
 
 
 Run from user
