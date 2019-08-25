@@ -9,9 +9,9 @@ Create user
 -----------
     # adduser user
 
-Remove user sudo password:
-
-    # echo "user ALL=NOPASSWD: ALL" >> /etc/sudoers
+Add them into `sudo` group: `# usermod -a -G sudo user`
+Change `/etc/sudoers` with `visudo` to remove password input:
+`%sudo   ALL=(ALL) NOPASSWD: ALL`
 
 
 Run from user
