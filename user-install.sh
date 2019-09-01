@@ -17,7 +17,7 @@ python3 -m venv py3env
 ./py3env/bin/pip install -r requirements.txt
 
 
-echo "=== Enable sudo autocomplete, vim-like comand line"
+echo "=== Update .bashrc"
 cat >> ~/.bashrc << EOF
 
 # sudo autocomplete

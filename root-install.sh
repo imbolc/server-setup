@@ -26,6 +26,17 @@ apt install -y libyaml-dev
 # base python
 apt install -y python python-setuptools python-dev
 
+echo "=== Update .bashrc"
+cat >> ~/.bashrc << EOF
+
+# vim-like comand line
+set -o vi
+
+# vim as default editor
+export VISUAL=vim
+export EDITOR="$VISUAL"
+EOF
+
 
 echo "=== LOCALES"
 apt install -y locales 
