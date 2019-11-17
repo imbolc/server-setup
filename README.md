@@ -3,7 +3,7 @@ Setup Debian Stretch server
 
 Run from root
 -------------
-    # cd && wget --no-check-certificate https://raw.github.com/imbolc/stretch-setup/master/root-install.sh && bash root-install.sh
+    # cd && wget --no-check-certificate https://raw.github.com/imbolc/stretch-setup/master/buster/root-install.sh && bash root-install.sh
 
 Non-root user
 -------------
@@ -15,7 +15,7 @@ Non-root user
 Run from user
 -------------
     # su user
-    $ cd && wget --no-check-certificate https://raw.github.com/imbolc/stretch-setup/master/user-install.sh && bash user-install.sh
+    $ cd && wget --no-check-certificate https://raw.github.com/imbolc/stretch-setup/master/buster/user-install.sh && bash user-install.sh
 
 
 Setup ssh pubkey auth
@@ -52,8 +52,18 @@ Install python
 3. Set default versions with: `cd; pyenv local 2.x.y 3.x.y`
 
 
-Install postgres
-----------------
+Postgres
+--------
+
+    echo 'deb http://apt.postgresql.org/pub/repos/apt/ buster-pgdg main' | sudo tee /etc/apt/sources.list.d/pgdg.list
+    wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
     sudo apt update
-    sudo apt install postgresql-9.6 postgresql-server-dev-9.6
+    sudo apt install postgresql-12 postgresql-server-dev-12
     sudo su postgres -c "cd /; createuser -s user"
+
+
+Node
+----
+
+    curl -sL https://deb.nodesource.com/setup_13.x | bash -
+    sudo apt install -y nodejs
