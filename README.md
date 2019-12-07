@@ -3,7 +3,7 @@ Setup Debian Stretch server
 
 Run from root
 -------------
-    # cd && wget --no-check-certificate https://raw.github.com/imbolc/stretch-setup/master/buster/root-install.sh && bash root-install.sh
+    # cd && wget --no-check-certificate https://raw.github.com/imbolc/server-setup/master/buster/root-install.sh && bash root-install.sh
 
 Non-root user
 -------------
@@ -15,7 +15,7 @@ Non-root user
 Run from user
 -------------
     # su user
-    $ cd && wget --no-check-certificate https://raw.github.com/imbolc/stretch-setup/master/buster/user-install.sh && bash user-install.sh
+    $ cd && wget --no-check-certificate https://raw.github.com/imbolc/server-setup/master/buster/user-install.sh && bash user-install.sh
 
 
 Setup ssh pubkey auth
