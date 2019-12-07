@@ -90,7 +90,7 @@ def update_files():
 
 
 def is_pip_installed():
-    return not os.system("pip -V > /dev/null")
+    return not os.system("pip3 -V > /dev/null")
 
 
 def install_pip():
@@ -110,13 +110,12 @@ def is_ipython_installed():
 
 
 def install_ipython():
-    if is_ipython_installed():
-        return
     if not install_pip():
         print("can't install pip")
         return
-    print("installing ipython")
-    os.system("pip3 install ipython > /dev/null")
+    if not is_ipython_installed():
+        print("installing ipython")
+        os.system("pip3 install ipython > /dev/null")
     os.system("python3 -m IPython profile create > /dev/null")
 
 
