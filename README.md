@@ -65,5 +65,5 @@ Postgres
 Node
 ----
 
-    curl -sL https://deb.nodesource.com/setup_13.x | bash -
+    sudo curl -sL https://deb.nodesource.com/setup_13.x | sudo bash -
     sudo apt install -y nodejs
