@@ -49,7 +49,7 @@ Install python
 --------------
 1. Look at avaliable versions with `pyenv install --list`
 2. Install the last versions with `pyenv install <version>`
-3. Set default versions with: `cd; pyenv local 2.x.y 3.x.y`
+3. Set default versions with: `cd; pyenv global 3.x.y`
 
 
 Postgres
