@@ -9,7 +9,7 @@ echo "=== INSTALL PACKAGES"
 apt install -y sudo tmux curl htop cron mc ranger mosh rsync ntp
 
 # web
-apt install -y nginx supervisor
+apt install -y nginx
 
 # build
 apt install -y gcc build-essential
