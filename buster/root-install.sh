@@ -1,11 +1,9 @@
 #!/usr/bin/env bash
 
 read -p "Enter a username for sudo user: " -i user -e SUDO_USER
-adduser $SUDO_USER
+adduser --gecos "" $SUDO_USER
 adduser $SUDO_USER sudo
 echo "$SUDO_USER ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/$SUDO_USER
-# /etc/init.d/sudo restart
-
 
 _AUTH_KEYS_FILENAME=/home/$SUDO_USER/.ssh/authorized_keys
 echo
@@ -19,24 +17,6 @@ while true; do
     read -n 1 -r -s -p "There's nothing in $_AUTH_KEYS_FILENAME at the moment. Press any key when it's ready..."
 done
 echo
-
-cat >> /etc/ssh/sshd_config << EOF
-# disable password-based authentication
-PasswordAuthentication no
-ChallengeResponseAuthentication no
-UsePAM no
-
-# disable root login
-PermitRootLogin no
-
-# only allow ssh connections from only these users
-AllowUsers $SUDO_USER
-EOF
-systemctl restart sshd.service
-
-echo "Now only $SUDO_USER is alowed to access the server by ssh"
-echo "Please, check that you can log-in before proceeding: ssh $SUDO_USER@your_server_ip"
-read -n 1 -r -s -p "Press any key to continue ..."
 
 apt update && apt upgrade -y
 
@@ -119,3 +99,24 @@ EOF
 
 echo === Setting up $SUDO_USER
 runuser -l imbolc -c 'cd && wget --no-check-certificate https://raw.github.com/imbolc/server-setup/master/buster/user-install.sh && bash user-install.sh'
+
+
+echo === Restricting SSH authentication
+cat >> /etc/ssh/sshd_config << EOF
+# disable password-based authentication
+PasswordAuthentication no
+ChallengeResponseAuthentication no
+UsePAM no
+
+# disable root login
+PermitRootLogin no
+
+# only allow ssh connections from only these users
+AllowUsers $SUDO_USER
+EOF
+systemctl restart sshd.service
+
+echo
+echo "Everything is done, congrats :)"
+echo "Now only $SUDO_USER is alowed to access the server by ssh with only public key authorization option"
+echo "Check that you can log-in before closing this connection: ssh $SUDO_USER@your_server_ip"
