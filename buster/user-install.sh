@@ -2,6 +2,7 @@
 
 echo "=== SSH"
 cd; mkdir .ssh; chmod 700 .ssh; cd .ssh; touch authorized_keys; chmod 600 authorized_keys
+cat /dev/zero | ssh-keygen -q -N ""
 
 
 echo "=== VIM"

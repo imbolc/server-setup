@@ -1,8 +1,13 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-apt update
-apt upgrade -y
+read -p "Enter a username for sudo user: " -i user -e SUDO_USER
+adduser $SUDO_USER
+adduser $SUDO_USER sudo
+echo "$SUDO_USER ALL=(ALL) NOPASSWD: ALL" | sudo tee /etc/sudoers.d/$SUDO_USER > /dev/null
+/etc/init.d/sudo restart
 
+
+apt update && apt upgrade -y
 
 echo "=== INSTALL PACKAGES"
 # core
@@ -79,3 +84,7 @@ echo "=== .inputrc"
 cat >> ~/.inputrc << EOF
 set editing-mode vi
 EOF
+
+
+echo === Setting up $SUDO_USER
+runuser -l imbolc -c 'cd && wget --no-check-certificate https://raw.github.com/imbolc/server-setup/master/buster/user-install.sh && bash user-install.sh'
