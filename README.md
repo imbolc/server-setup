@@ -6,32 +6,6 @@ Run from root
     # cd && wget --no-check-certificate https://raw.github.com/imbolc/server-setup/master/buster/root-install.sh && bash root-install.sh
 
 
-Setup ssh public key based authentication
------------------------------------------
-Copy public key from your local machine:
-TODO: it should be done before restricting password based connections
-
-    local@mashine$ ssh-copy-id user@sever_ip
-
-
-Restrict ssh connections: `sudo vim /etc/ssh/sshd_config`
-
-    # disable password-based authentication
-    PasswordAuthentication no
-
-    # disable root login
-    PermitRootLogin no
-
-    # only allow ssh connections from these users
-    AllowUsers user
-
-Restart ssh daemon:
-
-    sudo reboot
-
-    systemctl restart sshd.service
-
-
 Install python
 --------------
 1. Look at available versions with `pyenv install --list`
