@@ -3,9 +3,40 @@
 read -p "Enter a username for sudo user: " -i user -e SUDO_USER
 adduser $SUDO_USER
 adduser $SUDO_USER sudo
-echo "$SUDO_USER ALL=(ALL) NOPASSWD: ALL" | sudo tee /etc/sudoers.d/$SUDO_USER > /dev/null
-/etc/init.d/sudo restart
+echo "$SUDO_USER ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/$SUDO_USER
+# /etc/init.d/sudo restart
 
+
+_AUTH_KEYS_FILENAME=/home/$SUDO_USER/.ssh/authorized_keys
+echo
+echo We\'re going to disable password-based authentication.
+echo To copy public key from your local computer run: ssh-copy-id $SUDO_USER@your_server_ip
+while true; do
+    if [ -s $_AUTH_KEYS_FILENAME ]; then
+        break;
+    fi
+    echo
+    read -n 1 -r -s -p "There's nothing in $_AUTH_KEYS_FILENAME at the moment. Press any key when it's ready..."
+done
+echo
+
+cat >> /etc/ssh/sshd_config << EOF
+# disable password-based authentication
+PasswordAuthentication no
+ChallengeResponseAuthentication no
+UsePAM no
+
+# disable root login
+PermitRootLogin no
+
+# only allow ssh connections from only these users
+AllowUsers $SUDO_USER
+EOF
+systemctl restart sshd.service
+
+echo "Now only $SUDO_USER is alowed to access the server by ssh"
+echo "Please, check that you can log-in before proceeding: ssh $SUDO_USER@your_server_ip"
+read -n 1 -r -s -p "Press any key to continue ..."
 
 apt update && apt upgrade -y
 

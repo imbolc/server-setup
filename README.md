@@ -1,53 +1,40 @@
-Setup Debian Stretch server
-==========================
+Setup a debian-based server
+============================
 
 Run from root
 -------------
     # cd && wget --no-check-certificate https://raw.github.com/imbolc/server-setup/master/buster/root-install.sh && bash root-install.sh
 
-Non-root user
--------------
-- Add a user: `adduser user`
-- Add them into sudo group: `adduser user sudo`
-- Change `/etc/sudoers` with `visudo` to disable password input: `%sudo   ALL=(ALL) NOPASSWD: ALL`
 
-
-Run from user
--------------
-    # su user
-    $ cd && wget --no-check-certificate https://raw.github.com/imbolc/server-setup/master/buster/user-install.sh && bash user-install.sh
-
-
-Setup ssh pubkey auth
----------------------
-Copy pubkey from local mashine:
+Setup ssh public key based authentication
+-----------------------------------------
+Copy public key from your local machine:
+TODO: it should be done before restricting password based connections
 
     local@mashine$ ssh-copy-id user@sever_ip
 
-Generate local keys:
 
-    ssh-keygen -t rsa
+Restrict ssh connections: `sudo vim /etc/ssh/sshd_config`
 
-
-**sudo vim /etc/ssh/sshd_config**
-
-    # disable password auth
+    # disable password-based authentication
     PasswordAuthentication no
 
     # disable root login
     PermitRootLogin no
 
-    # ssh access allowed user list
+    # only allow ssh connections from these users
     AllowUsers user
 
-Restart ssh daemon: 
+Restart ssh daemon:
 
     sudo reboot
+
+    systemctl restart sshd.service
 
 
 Install python
 --------------
-1. Look at avaliable versions with `pyenv install --list`
+1. Look at available versions with `pyenv install --list`
 2. Install the last versions with `pyenv install 3.x.y`
 3. Set it as the default versions with: `pyenv global 3.x.y`
 
@@ -60,7 +47,6 @@ Postgres
     sudo apt update
     sudo apt install postgresql-12 postgresql-server-dev-12
     sudo su postgres -c "cd /; createuser -s user"
-
 
 Node
 ----
