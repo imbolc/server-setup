@@ -3,7 +3,8 @@ Setup a debian-based server
 
 Run from root
 -------------
-    # cd && wget --no-check-certificate https://raw.github.com/imbolc/server-setup/master/buster/root-install.sh && bash root-install.sh
+
+    cd && wget --no-check-certificate https://raw.github.com/imbolc/server-setup/master/buster/root-install.sh && bash root-install.sh
 
 
 Install python
