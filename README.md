@@ -8,7 +8,7 @@ Run from root
 Non-root user
 -------------
 - Add a user: `adduser user`
-- Add them into sudo group: `usermod -a -G sudo user`
+- Add them into sudo group: `adduser user sudo`
 - Change `/etc/sudoers` with `visudo` to disable password input: `%sudo   ALL=(ALL) NOPASSWD: ALL`
 
 
