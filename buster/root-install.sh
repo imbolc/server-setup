@@ -98,7 +98,7 @@ EOF
 
 
 echo === Setting up $SUDO_USER
-runuser -l imbolc -c 'cd && wget --no-check-certificate https://raw.github.com/imbolc/server-setup/master/buster/user-install.sh && bash user-install.sh'
+runuser -l $SUDO_USER -c 'cd && wget --no-check-certificate https://raw.github.com/imbolc/server-setup/master/buster/user-install.sh && bash user-install.sh'
 
 
 echo === Restricting SSH authentication
