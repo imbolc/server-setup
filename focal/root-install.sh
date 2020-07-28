@@ -27,6 +27,10 @@ while true; do
 done
 echo
 
+echo "=== CLEANUP"
+sudo rm -rf /var/cache/snapd/
+sudo apt autoremove --purge -y snapd unattended-upgrades
+
 echo "=== UPGRADE"
 apt update
 apt install -y dialog
