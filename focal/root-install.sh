@@ -1,5 +1,14 @@
 #!/usr/bin/env bash
 
+if ! grep -Fxq 'PasswordAuthentication yes' /etc/ssh/sshd_config
+then
+    echo 'Password authentication should be enabled'
+    echo 'Put `PasswordAuthentication yes` into your `/etc/ssh/sshd_config`'
+    echo 'And restart ssh service with `systemctl restart sshd.service`'
+    exit 1
+fi
+echo continue
+
 read -p "Enter a username for sudo user: " -i user -e SUDO_USER
 adduser --gecos "" $SUDO_USER
 adduser $SUDO_USER sudo
@@ -22,7 +31,8 @@ apt update && apt upgrade -y
 
 echo "=== INSTALL PACKAGES"
 # core
-apt install -y sudo tmux curl htop cron mc ranger mosh rsync ntp
+apt install dialog
+apt install -y sudo apt-utils tmux curl htop cron mc ranger mosh rsync ntp git
 
 # web
 apt install -y nginx
@@ -40,7 +50,10 @@ apt install -y libjpeg-dev libfreetype6-dev
 apt install -y libyaml-dev
 
 # base python
-apt install -y python python-setuptools python-dev
+apt install -y python3 python3-setuptools python3-dev python3-pip
+
+echo "=== Open mosh ports"
+crontab -l | { cat; echo "@reboot /usr/sbin/iptables -I INPUT 1 -p udp --dport 60000:61000 -j ACCEPT"; } | crontab -
 
 echo "=== Update .bashrc"
 cat >> ~/.bashrc << EOF
@@ -62,14 +75,6 @@ en_US.UTF-8 UTF-8
 ru_RU.UTF-8 UTF-8
 EOF
 /usr/sbin/locale-gen
-
-
-echo "=== GIT"
-apt install -y git-core
-git config --global core.editor "vim"
-git config --global alias.ci commit
-git config --global alias.st status
-git config --global alias.co checkout
 
 
 echo "=== VIM"
