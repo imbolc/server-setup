@@ -27,11 +27,13 @@ while true; do
 done
 echo
 
-apt update && apt upgrade -y
+echo "=== UPGRADE"
+apt update
+apt install -y dialog
+apt upgrade -y
 
 echo "=== INSTALL PACKAGES"
 # core
-apt install dialog
 apt install -y sudo apt-utils tmux curl htop cron mc ranger mosh rsync ntp git
 
 # web
