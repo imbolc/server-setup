@@ -27,8 +27,8 @@ Postgres
     echo 'deb http://apt.postgresql.org/pub/repos/apt/ buster-pgdg main' | sudo tee /etc/apt/sources.list.d/pgdg.list
     wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
     sudo apt update
-    sudo apt install postgresql-12 postgresql-server-dev-12
-    sudo su postgres -c "cd /; createuser -s user"
+    sudo apt install postgresql-13 postgresql-server-dev-13
+    sudo su postgres -c "cd /; createuser -s $USER"
 
 Node
 ----
