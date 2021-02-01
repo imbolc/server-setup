@@ -65,7 +65,7 @@ EOF
 
 
 echo "=== GIT"
-apt install -y git-core
+apt install -y git-core bash-completion
 git config --global core.editor "vim"
 git config --global alias.ci commit
 git config --global alias.st status
