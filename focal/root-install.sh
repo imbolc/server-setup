@@ -30,6 +30,7 @@ echo
 echo "=== CLEANUP"
 sudo rm -rf /var/cache/snapd/
 sudo apt autoremove --purge -y snapd unattended-upgrades
+sudo rm -rf /var/log/unattended-upgrades
 
 echo "=== UPGRADE"
 apt update
