@@ -4,7 +4,7 @@ Setup a debian-based server
 Run from root
 -------------
 ```sh
-cd && wget --no-check-certificate https://raw.github.com/imbolc/server-setup/master/buster/root-install.sh && bash root-install.sh
+cd && wget --no-check-certificate https://raw.github.com/imbolc/server-setup/master/bullseye/root-install.sh && bash root-install.sh
 ```
 
 Ubuntu version:
