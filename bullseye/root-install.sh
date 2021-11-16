@@ -37,6 +37,7 @@ apt install -y \
   npm \
   ntp \
   ranger \
+  ripgrep \
   rsync \
   tmux \
   tree \
