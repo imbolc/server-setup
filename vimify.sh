@@ -6,6 +6,6 @@ export VISUAL=vim
 export EDITOR="$VISUAL"
 EOF
 
-tee ~/.inputrc > /dev/null << EOF
+tee -a ~/.inputrc > /dev/null << EOF
 set editing-mode vi
 EOF
