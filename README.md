@@ -15,11 +15,14 @@ cd && wget --no-check-certificate https://raw.github.com/imbolc/server-setup/mas
 
 Partials
 --------
-### Vimification
-```sh
-bash <(curl -L https://raw.github.com/imbolc/server-setup/master/vimify.sh)
-```
-
+* vimification
+    ```sh
+    bash <(curl -sL https://raw.github.com/imbolc/server-setup/master/partials/vimify.sh)
+    ```
+* tmux
+    ```sh
+    bash <(curl -sL https://raw.github.com/imbolc/server-setup/master/partials/tmux.sh)
+    ```
 
 Install python
 --------------
