@@ -13,6 +13,13 @@ Ubuntu version:
 cd && wget --no-check-certificate https://raw.github.com/imbolc/server-setup/master/focal/root-install.sh && bash root-install.sh
 ```
 
+Partials
+--------
+### Vimification
+```sh
+bash <(curl -L https://raw.github.com/imbolc/server-setup/master/vimify.sh)
+```
+
 
 Install python
 --------------
