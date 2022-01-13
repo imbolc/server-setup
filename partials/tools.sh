@@ -3,6 +3,9 @@ set -euo pipefail
 
 echo -en "essential tools ... "
 
+sudo apt -qqq update
+sudo apt -qqqy upgrade
+
 sudo apt install -qqqy \
   curl \
   htop \
