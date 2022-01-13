@@ -3,7 +3,7 @@ set -euo pipefail
 
 bash <(curl -sL https://raw.github.com/imbolc/server-setup/master/partials/tools.sh)
 bash <(curl -sL https://raw.github.com/imbolc/server-setup/master/partials/vimification.sh)
-bash <(curl -sL https://raw.github.com/imbolc/server-setup/master/partials/vimrc.sh)
+bash <(curl -sL https://raw.github.com/imbolc/server-setup/master/partials/vim.sh)
 bash <(curl -sL https://raw.github.com/imbolc/server-setup/master/partials/tmux.sh)
 bash <(curl -sL https://raw.github.com/imbolc/server-setup/master/partials/git.sh)
 bash <(curl -sL https://raw.github.com/imbolc/server-setup/master/partials/aliases.sh)

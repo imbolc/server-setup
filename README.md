@@ -35,7 +35,7 @@ bash <(curl -sL https://raw.github.com/imbolc/server-setup/master/partials/all.s
     ```
 * vim
     ```sh
-    bash <(curl -sL https://raw.github.com/imbolc/server-setup/master/partials/vimrc.sh)
+    bash <(curl -sL https://raw.github.com/imbolc/server-setup/master/partials/vim.sh)
     ```
 * tmux
     ```sh
