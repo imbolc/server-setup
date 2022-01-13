@@ -1,5 +1,5 @@
-Setup a debian-based server
-============================
+A common server setup
+=====================
 
 Run from root
 -------------
@@ -15,13 +15,35 @@ cd && wget --no-check-certificate https://raw.github.com/imbolc/server-setup/mas
 
 Partials
 --------
+All partials
+
+```sh
+bash <(curl -sL https://raw.github.com/imbolc/server-setup/master/partials/all.sh)
+```
+
+* essential cli tools
+    ```sh
+    bash <(curl -sL https://raw.github.com/imbolc/server-setup/master/partials/tools.sh)
+    ```
+* common bash aliases
+    ```sh
+    bash <(curl -sL https://raw.github.com/imbolc/server-setup/master/partials/aliases.sh)
+    ```
 * vimification
     ```sh
-    bash <(curl -sL https://raw.github.com/imbolc/server-setup/master/partials/vimify.sh)
+    bash <(curl -sL https://raw.github.com/imbolc/server-setup/master/partials/vimification.sh)
+    ```
+* vim
+    ```sh
+    bash <(curl -sL https://raw.github.com/imbolc/server-setup/master/partials/vimrc.sh)
     ```
 * tmux
     ```sh
     bash <(curl -sL https://raw.github.com/imbolc/server-setup/master/partials/tmux.sh)
+    ```
+* git
+    ```sh
+    bash <(curl -sL https://raw.github.com/imbolc/server-setup/master/partials/git.sh)
     ```
 
 Install python

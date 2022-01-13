@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
+set -euo pipefail
 
-set -o nounset errexit
-echo -en "  tmux ...         "
+echo -en "tmux ... "
+
+sudo apt -qqq update
+sudo apt install -qqqy tmux
 
 tee ~/.tmux.conf > /dev/null << EOF
 unbind C-b
