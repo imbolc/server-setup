@@ -72,4 +72,4 @@ nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
 EOF
 
-echo -e "\033[0;32mcreated\033[0m"
+echo -e "\033[0;32mok\033[0m"

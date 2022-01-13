@@ -8,4 +8,4 @@ bash <(curl -sL https://raw.github.com/imbolc/server-setup/master/partials/tmux.
 bash <(curl -sL https://raw.github.com/imbolc/server-setup/master/partials/git.sh)
 bash <(curl -sL https://raw.github.com/imbolc/server-setup/master/partials/aliases.sh)
 
-echo -e "\033[0;32mAll partials run successfully\033[0m"
+echo -e "\033[0;32mOK: \033[0mall partials run successfully"
