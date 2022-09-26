@@ -21,6 +21,12 @@ All partials
 bash <(curl -sL https://raw.github.com/imbolc/server-setup/master/partials/all.sh)
 ```
 
+all partials for root from a sudo user
+
+```sh
+sudo su -c 'bash <(curl -sL https://raw.github.com/imbolc/server-setup/master/partials/all.sh)'
+```
+
 * essential cli tools
     ```sh
     bash <(curl -sL https://raw.github.com/imbolc/server-setup/master/partials/tools.sh)
