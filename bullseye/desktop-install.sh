@@ -44,7 +44,6 @@ sudo apt install \
   ranger \
   redis \
   rsync \
-  snapd \
   tmux \
   tree \
   wget \
@@ -56,8 +55,8 @@ sudo apt install \
 echo "Vim"
 sudo apt remove -y vim 
 pip3 install ranger-fm pynvim
-sudo snap install --classic nvim
-sudo snap alias nvim vim
+sudo curl -L https://github.com/neovim/neovim/releases/latest/download/nvim.appimage -o /usr/bin/vim
+sudo chmod +x /usr/bin/vim
 
 echo "Flatpack"
 flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
