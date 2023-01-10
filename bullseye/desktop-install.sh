@@ -43,6 +43,7 @@ sudo apt install \
   python3-venv \
   ranger \
   redis \
+  redshift \
   rsync \
   tmux \
   tree \
@@ -73,8 +74,8 @@ echo "Firefox"
 sudo apt remove -y firefox-esr
 flatpak install -y flathub org.mozilla.firefox
 
-echo "FreeTube"
-flatpak install flathub io.freetubeapp.FreeTube
+echo "Anki"
+flatpak install -y flathub net.ankiweb.Anki
 
 echo "=== Autostart"
 mkdir -p ~/.config/autostart
