@@ -100,5 +100,8 @@ cargo install \
   stylua \
   taplo-cli \
   typos-cli \
+  bottom \
+  cargo-limit \
+  cargo-sync-readme \
 
 rustup target add x86_64-unknown-linux-musl
