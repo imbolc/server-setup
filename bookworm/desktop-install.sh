@@ -103,5 +103,6 @@ cargo install \
   bottom \
   cargo-limit \
   cargo-sync-readme \
+  rust-script \
 
 rustup target add x86_64-unknown-linux-musl
