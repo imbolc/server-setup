@@ -106,3 +106,7 @@ cargo install \
   rust-script \
 
 rustup target add x86_64-unknown-linux-musl
+
+# === switch to bluetooth headbuds on connection, details: https://gist.github.com/diffficult/37360df0824137e04659e7f5ebf9a561
+sudo sed -i '/load-module module-bluetooth-discover/a load-module module-switch-on-connect' /etc/pulse/default.pa
+pulseaudio -k
