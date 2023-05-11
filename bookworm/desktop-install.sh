@@ -78,6 +78,7 @@ sudo apt install \
   qbittorrent \
   blueman \
   xclip \
+  vlc \
 
 # === python
 git clone https://github.com/pyenv/pyenv.git ~/.pyenv
@@ -88,22 +89,24 @@ git clone https://github.com/pyenv/pyenv-update.git ~/.pyenv/plugins/pyenv-updat
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 
 cargo install \
+  bottom \
   cargo-expand \
+  cargo-generate \
+  cargo-limit \
+  cargo-readme \
+  cargo-sync-readme \
   cargo-watch \
   fd-find \
   git-delta \
   mask \
   ripgrep \
+  rust-script \
   rusty-hook \
   skim \
   sqlx-cli \
   stylua \
   taplo-cli \
   typos-cli \
-  bottom \
-  cargo-limit \
-  cargo-sync-readme \
-  rust-script \
 
 rustup target add x86_64-unknown-linux-musl
 
