@@ -96,6 +96,7 @@ cargo install \
   cargo-readme \
   cargo-sync-readme \
   cargo-watch \
+  comrak \
   fd-find \
   git-delta \
   mask \
@@ -113,3 +114,22 @@ rustup target add x86_64-unknown-linux-musl
 # === switch to bluetooth headbuds on connection, details: https://gist.github.com/diffficult/37360df0824137e04659e7f5ebf9a561
 sudo sed -i '/load-module module-bluetooth-discover/a load-module module-switch-on-connect' /etc/pulse/default.pa
 pulseaudio -k
+
+# === limit CPU performance
+sudo apt install powercap-utils
+sudo tee -a /etc/systemd/system/cpu-powercap.service > /dev/null << EOF
+[Unit]
+Description=Limit CPU performance
+
+[Service]
+ExecStart=/usr/bin/powercap-set -p intel-rapl -z 0 -c 1 -l 30000000
+Type=oneshot
+RemainAfterExit=yes
+User=root
+
+[Install]
+WantedBy=multi-user.target
+EOF
+sudo systemctl enable cpu-powercap
+sudo systemctl start cpu-powercap
+sudo systemctl status cpu-powercap
