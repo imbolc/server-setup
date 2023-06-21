@@ -1,3 +1,11 @@
+# from root
+
+apt update && apt upgrade -y
+
+# disable sudo password
+read -p "Enter a username for sudo user: " -i user -e sudo_user
+echo "$sudo_user ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/$sudo_user
+
 # === ssh keys
 ssh-add
 
@@ -69,16 +77,24 @@ pip3 install ranger-fm pynvim
 sudo curl -L https://github.com/neovim/neovim/releases/latest/download/nvim.appimage -o /usr/bin/vim
 sudo chmod +x /usr/bin/vim
 
+
+git clone git@github.com:imbolc/nvim.git ~/.config/nvim
+# throws errors, could make sense to run multiple times
+vim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'
+
 # === apps
+# pub `flameshot gui` to PrtSrc
 sudo apt install \
-  deepin-screen-recorder \
-  terminator \
-  gitk \
-  keepassxc \
-  qbittorrent \
   blueman \
-  xclip \
+  flameshot \
+  gitk \
+  kazam \
+  keepassxc \
+  openvpn \
+  qbittorrent \
+  terminator \
   vlc \
+  xclip \
 
 # === python
 git clone https://github.com/pyenv/pyenv.git ~/.pyenv
@@ -87,8 +103,10 @@ git clone https://github.com/pyenv/pyenv-update.git ~/.pyenv/plugins/pyenv-updat
 
 # === rust
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+rustup target add x86_64-unknown-linux-musl
+rustup component add rustfmt clippy rust-src rust-analyzer
 
-cargo install \
+cargo install --locked \
   bottom \
   cargo-expand \
   cargo-generate \
@@ -107,9 +125,9 @@ cargo install \
   sqlx-cli \
   stylua \
   taplo-cli \
+  tealdeer \
   typos-cli \
-
-rustup target add x86_64-unknown-linux-musl
+  xplr \
 
 # === switch to bluetooth headbuds on connection, details: https://gist.github.com/diffficult/37360df0824137e04659e7f5ebf9a561
 sudo sed -i '/load-module module-bluetooth-discover/a load-module module-switch-on-connect' /etc/pulse/default.pa
@@ -133,3 +151,9 @@ EOF
 sudo systemctl enable cpu-powercap
 sudo systemctl start cpu-powercap
 sudo systemctl status cpu-powercap
+
+# === nerd-fonts
+git clone --depth=1 https://github.com/ryanoasis/nerd-fonts.git
+cd nerd-fonts
+./install.sh
+cargo install --git https://github.com/loichyan/nerdfix.git
