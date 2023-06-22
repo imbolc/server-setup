@@ -1,4 +1,6 @@
 # from root
+bash <(curl -sL https://raw.github.com/imbolc/server-setup/master/partials/vimification.sh)
+bash
 
 apt update && apt upgrade -y
 
@@ -151,9 +153,3 @@ EOF
 sudo systemctl enable cpu-powercap
 sudo systemctl start cpu-powercap
 sudo systemctl status cpu-powercap
-
-# === nerd-fonts
-git clone --depth=1 https://github.com/ryanoasis/nerd-fonts.git
-cd nerd-fonts
-./install.sh
-cargo install --git https://github.com/loichyan/nerdfix.git
