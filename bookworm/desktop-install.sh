@@ -1,8 +1,10 @@
 # from root
+apt update && apt upgrade -y
+
+# vimification
+apt install curl
 bash <(curl -sL https://raw.github.com/imbolc/server-setup/master/partials/vimification.sh)
 bash
-
-apt update && apt upgrade -y
 
 # disable sudo password
 read -p "Enter a username for sudo user: " -i user -e sudo_user
@@ -17,7 +19,7 @@ sudo apt install -y \
     primus mesa-utils \
     xserver-xorg-input-mouse \
 
-sudo ln -s /usr/share/X11/xorg.conf.d /etc/bumblebee/xorg.conf.d
+sudo ln -s /usr/share/X11/xorg.conf.d /etc/bumblebee/
 sudo systemctl restart bumblebeed
 
 # test integrated graphic card
@@ -76,8 +78,8 @@ sudo su postgres -c "cd /; createuser -s $USER"
 # === vim
 sudo apt remove -y vim 
 pip3 install ranger-fm pynvim
-sudo curl -L https://github.com/neovim/neovim/releases/latest/download/nvim.appimage -o /usr/bin/vim
-sudo chmod +x /usr/bin/vim
+sudo curl -L https://github.com/neovim/neovim/releases/latest/download/nvim.appimage -o /usr/local/bin/vim
+sudo chmod +x /usr/local/bin/vim
 
 
 git clone git@github.com:imbolc/nvim.git ~/.config/nvim
