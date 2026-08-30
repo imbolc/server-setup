@@ -1,12 +1,12 @@
-#!/usr/bin/env bash
-set -euo pipefail
+#!/bin/sh
+set -eu
 
-echo -en "tmux ... "
+printf 'tmux ... '
 
 sudo apt -qqq update
 sudo apt install -qqqy tmux
 
-tee ~/.tmux.conf > /dev/null << EOF
+tee "$HOME/.tmux.conf" > /dev/null <<'EOF'
 unbind C-b
 set-option -g prefix C-a
 
@@ -32,4 +32,4 @@ setw -g window-status-style fg=white
 set -g status-left  '#[bg=white]#[fg=black]'
 EOF
 
-echo -e "\033[0;32mok\033[0m"
+printf '\033[0;32mok\033[0m\n'

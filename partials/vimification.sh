@@ -1,37 +1,31 @@
-#!/usr/bin/env bash
-set -euo pipefail
+#!/bin/sh
+set -eu
 
-echo -en "vimification ... "
+printf 'vimification ... '
+
+append_missing_lines() {
+    file=$1
+    while IFS= read -r line; do
+        grep -Fqx "$line" "$file" 2>/dev/null || printf '%s\n' "$line" >> "$file"
+    done
+}
 
 # bash
-file="$HOME/.bashrc"
-lines=(
-    'set -o vi'
-    'export VISUAL=vim'
-    'export EDITOR="$VISUAL"'
-)
-for line in "${lines[@]}"; do
-    grep -qxFs "$line" "$file" || echo "$line" >> "$file"
-done
+append_missing_lines "$HOME/.bashrc" <<'EOF'
+set -o vi
+export VISUAL=vim
+export EDITOR="$VISUAL"
+EOF
 
 # input
-file="$HOME/.inputrc"
-lines=(
-    'set editing-mode vi'
-)
-for line in "${lines[@]}"; do
-    grep -qxFs "$line" "$file" || echo "$line" >> "$file"
-done
+append_missing_lines "$HOME/.inputrc" <<'EOF'
+set editing-mode vi
+EOF
 
 # tmux
-file="$HOME/.tmux.conf"
-lines=(
-    'set -g status-keys vi'
-    'setw -g mode-keys vi'
-)
-for line in "${lines[@]}"
-do
-    grep -qxFs "$line" "$file" || echo "$line" >> "$file"
-done
+append_missing_lines "$HOME/.tmux.conf" <<'EOF'
+set -g status-keys vi
+setw -g mode-keys vi
+EOF
 
-echo -e "\033[0;32mok\033[0m"
+printf '\033[0;32mok\033[0m\n'

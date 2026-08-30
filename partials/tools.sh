@@ -1,7 +1,7 @@
-#!/usr/bin/env bash
-set -euo pipefail
+#!/bin/sh
+set -eu
 
-echo -en "essential tools ... "
+printf 'essential tools ... '
 
 sudo apt -qqq update
 sudo apt -qqqy upgrade
@@ -19,4 +19,4 @@ sudo apt install -qqqy \
   tree \
   vim
 
-echo -e "\033[0;32mok\033[0m" 
+printf '\033[0;32mok\033[0m\n'

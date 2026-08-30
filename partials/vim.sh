@@ -1,14 +1,14 @@
-#!/usr/bin/env bash
-set -euo pipefail
+#!/bin/sh
+set -eu
 
-echo -en "vim ... "
+printf 'vim ... '
 
 sudo apt -qqq update
 sudo apt install -qqqy vim
 
-FNAME='~/.vimrc'
-test -f $FNAME && echo "already exists"
-test -f $FNAME || tee -a ~/.vimrc > /dev/null << EOF
+vimrc=$HOME/.vimrc
+test -f "$vimrc" && echo "already exists"
+test -f "$vimrc" || tee -a "$vimrc" > /dev/null <<'EOF'
 set nocompatible
 let mapleader=","
 
@@ -72,4 +72,4 @@ nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
 EOF
 
-echo -e "\033[0;32mok\033[0m"
+printf '\033[0;32mok\033[0m\n'

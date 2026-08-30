@@ -1,8 +1,13 @@
-#!/bin/bash
+#!/bin/sh
 
 echo "=== SSH"
-cd; mkdir .ssh; chmod 700 .ssh; cd .ssh; touch authorized_keys; chmod 600 authorized_keys
-cat /dev/zero | ssh-keygen -q -N ""
+cd || exit 1
+mkdir .ssh
+chmod 700 .ssh
+cd .ssh || exit 1
+touch authorized_keys
+chmod 600 authorized_keys
+ssh-keygen -q -N "" < /dev/zero
 
 
 echo "=== VIM"
@@ -12,7 +17,7 @@ mkdir ~/.config
 ln -s ~/.vim ~/.config/nvim
 vim +PlugInstall +qall
 
-cd ~/.vim
+cd "$HOME/.vim" || exit 1
 python3 -m venv py3env
 ./py3env/bin/pip install wheel
 ./py3env/bin/pip install -r requirements.txt
@@ -91,8 +96,8 @@ cat >> ~/.psqlrc << EOF
 EOF
 
 echo "=== Git config"
-git config --global user.name $(whoami)
-git config --global user.email $(whoami)@$(hostname)
+git config --global user.name "$(whoami)"
+git config --global user.email "$(whoami)@$(hostname)"
 git config --global core.editor "vim"
 git config --global alias.ci commit
 git config --global alias.st status

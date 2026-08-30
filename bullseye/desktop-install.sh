@@ -1,3 +1,5 @@
+#!/bin/sh
+
 # settings
 ssh-add
 

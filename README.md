@@ -4,13 +4,13 @@ A common server setup
 Run from root
 -------------
 ```sh
-cd && wget --no-check-certificate https://raw.github.com/imbolc/server-setup/master/bullseye/root-install.sh && bash root-install.sh
+cd && wget --no-check-certificate https://raw.github.com/imbolc/server-setup/master/bullseye/root-install.sh && sh root-install.sh
 ```
 
 Ubuntu version:
 
 ```sh
-cd && wget --no-check-certificate https://raw.github.com/imbolc/server-setup/master/focal/root-install.sh && bash root-install.sh
+cd && wget --no-check-certificate https://raw.github.com/imbolc/server-setup/master/focal/root-install.sh && sh root-install.sh
 ```
 
 Partials
@@ -18,38 +18,38 @@ Partials
 All partials
 
 ```sh
-bash <(curl -sL https://raw.github.com/imbolc/server-setup/master/partials/all.sh)
+curl -fsSL https://raw.github.com/imbolc/server-setup/master/partials/all.sh | sh
 ```
 
 all partials for root from a sudo user
 
 ```sh
-sudo su -c 'bash <(curl -sL https://raw.github.com/imbolc/server-setup/master/partials/all.sh)'
+curl -fsSL https://raw.github.com/imbolc/server-setup/master/partials/all.sh | sudo sh
 ```
 
 * essential cli tools
     ```sh
-    bash <(curl -sL https://raw.github.com/imbolc/server-setup/master/partials/tools.sh)
+    curl -fsSL https://raw.github.com/imbolc/server-setup/master/partials/tools.sh | sh
     ```
 * common bash aliases
     ```sh
-    bash <(curl -sL https://raw.github.com/imbolc/server-setup/master/partials/aliases.sh)
+    curl -fsSL https://raw.github.com/imbolc/server-setup/master/partials/aliases.sh | sh
     ```
 * vimification
     ```sh
-    bash <(curl -sL https://raw.github.com/imbolc/server-setup/master/partials/vimification.sh)
+    curl -fsSL https://raw.github.com/imbolc/server-setup/master/partials/vimification.sh | sh
     ```
 * vim
     ```sh
-    bash <(curl -sL https://raw.github.com/imbolc/server-setup/master/partials/vim.sh)
+    curl -fsSL https://raw.github.com/imbolc/server-setup/master/partials/vim.sh | sh
     ```
 * tmux
     ```sh
-    bash <(curl -sL https://raw.github.com/imbolc/server-setup/master/partials/tmux.sh)
+    curl -fsSL https://raw.github.com/imbolc/server-setup/master/partials/tmux.sh | sh
     ```
 * git
     ```sh
-    bash <(curl -sL https://raw.github.com/imbolc/server-setup/master/partials/git.sh)
+    curl -fsSL https://raw.github.com/imbolc/server-setup/master/partials/git.sh | sh
     ```
 
 Install python

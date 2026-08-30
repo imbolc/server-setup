@@ -1,23 +1,26 @@
-#!/usr/bin/env bash
+#!/bin/sh
 
 apt update && apt upgrade -y
 apt install -y sudo
 
-read -p "Enter a username for sudo user: " -i user -e SUDO_USER
-adduser --gecos "" $SUDO_USER
-adduser $SUDO_USER sudo
-echo "$SUDO_USER ALL=(ALL) NOPASSWD: ALL" >/etc/sudoers.d/$SUDO_USER
+printf 'Enter a username for sudo user [user]: '
+IFS= read -r SUDO_USER
+SUDO_USER=${SUDO_USER:-user}
+adduser --gecos "" "$SUDO_USER"
+adduser "$SUDO_USER" sudo
+printf '%s\n' "$SUDO_USER ALL=(ALL) NOPASSWD: ALL" >"/etc/sudoers.d/$SUDO_USER"
 
 _AUTH_KEYS_FILENAME=/home/$SUDO_USER/.ssh/authorized_keys
 echo
-echo We\'re going to disable password-based authentication.
-echo To copy public key from your local computer run: ssh-copy-id $SUDO_USER@your_server_ip
+echo "We're going to disable password-based authentication."
+echo "To copy public key from your local computer run: ssh-copy-id $SUDO_USER@your_server_ip"
 while true; do
-    if [ -s $_AUTH_KEYS_FILENAME ]; then
+    if [ -s "$_AUTH_KEYS_FILENAME" ]; then
         break
     fi
     echo
-    read -n 1 -r -s -p "There's nothing in $_AUTH_KEYS_FILENAME at the moment. Press any key when it's ready..."
+    printf "There's nothing in %s at the moment. Press Enter when it's ready..." "$_AUTH_KEYS_FILENAME"
+    IFS= read -r _input
 done
 echo
 
@@ -69,10 +72,10 @@ cat >>~/.inputrc <<EOF
 set editing-mode vi
 EOF
 
-echo === Setting up $SUDO_USER
-runuser -l $SUDO_USER -c 'cd && wget --no-check-certificate https://raw.github.com/imbolc/server-setup/master/bookworm/user-install.sh && bash user-install.sh'
+echo "=== Setting up $SUDO_USER"
+runuser -l "$SUDO_USER" -c 'cd && wget --no-check-certificate https://raw.github.com/imbolc/server-setup/master/bookworm/user-install.sh && sh user-install.sh'
 
-echo === Restricting SSH authentication
+echo "=== Restricting SSH authentication"
 cat >/etc/ssh/sshd_config <<EOF
 # disable password-based authentication
 PasswordAuthentication no

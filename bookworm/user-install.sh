@@ -1,13 +1,13 @@
-#!/bin/bash
+#!/bin/sh
 
 echo "=== SSH"
-cd
+cd || exit 1
 mkdir .ssh
 chmod 700 .ssh
-cd .ssh
+cd .ssh || exit 1
 touch authorized_keys
 chmod 600 authorized_keys
-cat /dev/zero | ssh-keygen -q -N ""
+ssh-keygen -q -N "" < /dev/zero
 
 echo "=== Update .bashrc"
 cat >>~/.bashrc <<EOF
@@ -82,8 +82,8 @@ cat >>~/.psqlrc <<EOF
 EOF
 
 echo "=== Git config"
-git config --global user.name $(whoami)
-git config --global user.email $(whoami)@$(hostname)
+git config --global user.name "$(whoami)"
+git config --global user.email "$(whoami)@$(hostname)"
 git config --global core.editor "vim"
 git config --global alias.ci commit
 git config --global alias.st status
