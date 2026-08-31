@@ -3,7 +3,11 @@
 ## Run from root
 
 ```sh
-cd && wget --no-check-certificate https://raw.github.com/imbolc/server-setup/master/bookworm/root-install.sh && sh root-install.sh
+cd &&
+wget --no-check-certificate -O setup-bookworm.sh https://raw.github.com/imbolc/server-setup/master/setup-bookworm.sh &&
+SUDO_USER=user \
+AUTHORIZED_KEY='ssh-ed25519 AAAA... user@example.com' \
+sh setup-bookworm.sh
 ```
 
 ## Partials
