@@ -4,6 +4,7 @@ set -eu
 echo 'This installer is not idempotent. Do not run it twice.'
 echo
 
+echo "Collecting setup details"
 SUDO_USER=
 while [ -z "$SUDO_USER" ]; do
     printf 'Sudo username (the only user allowed to log in via SSH): '
@@ -54,10 +55,12 @@ fi
 export DEBIAN_FRONTEND=noninteractive
 export NEEDRESTART_MODE=a
 
+echo "Updating system"
 apt-get update
 apt-get -y -o Dpkg::Options::=--force-confold upgrade
 apt-get -y -o Dpkg::Options::=--force-confold install sudo
 
+echo "Configuring sudo user"
 if [ "$CREATE_SUDO_USER" = yes ]; then
     adduser --disabled-password --gecos "" "$SUDO_USER"
 fi
@@ -74,7 +77,7 @@ printf '%s ALL=(ALL) NOPASSWD: ALL\n' "$SUDO_USER" >"$SUDOERS_FILE"
 chmod 440 "$SUDOERS_FILE"
 visudo -cf "$SUDOERS_FILE"
 
-echo "=== tools"
+echo "Installing tools"
 apt-get -y -o Dpkg::Options::=--force-confold install \
     curl \
     git \
@@ -87,7 +90,7 @@ apt-get -y -o Dpkg::Options::=--force-confold install \
     tree \
     wget
 
-echo "=== Update .bashrc"
+echo "Updating root .bashrc"
 cat >>~/.bashrc <<'EOF'
 
 # vim-like command line
@@ -98,7 +101,7 @@ export VISUAL=vim
 export EDITOR="$VISUAL"
 EOF
 
-echo "=== LOCALES"
+echo "Configuring locales"
 apt-get -y -o Dpkg::Options::=--force-confold install locales
 echo "LANG=en_DK.UTF-8" >/etc/default/locale
 cat >/etc/locale.gen <<'EOF'
@@ -108,23 +111,23 @@ ru_RU.UTF-8 UTF-8
 EOF
 /usr/sbin/locale-gen
 
-echo "=== GIT"
+echo "Configuring root Git"
 git config --global core.editor "vim"
 git config --global alias.ci commit
 git config --global alias.st status
 git config --global alias.co checkout
 
-echo "=== VIM"
+echo "Installing Neovim"
 apt-get -y -o Dpkg::Options::=--force-confold install neovim
 
-echo "=== .inputrc"
+echo "Updating root .inputrc"
 cat >>~/.inputrc <<'EOF'
 set editing-mode vi
 EOF
 
-echo "=== Setting up $SUDO_USER"
+echo "Configuring $SUDO_USER"
 runuser -l "$SUDO_USER" -c 'sh -s' <<'USER_INSTALL'
-echo "=== SSH"
+echo "Configuring user SSH files"
 cd || exit 1
 
 mkdir -p .ssh
@@ -136,7 +139,7 @@ if [ ! -e id_ed25519 ]; then
     ssh-keygen -q -t ed25519 -N "" -f id_ed25519
 fi
 
-echo "=== Update .bashrc"
+echo "Updating user .bashrc"
 cat >>~/.bashrc <<'EOF'
 
 # sudo autocomplete
@@ -155,7 +158,7 @@ if [ -d "$HOME/bin" ] ; then
 fi
 EOF
 
-echo "=== Bash aliases"
+echo "Configuring Bash aliases"
 cat >>~/.bash_aliases <<'EOF'
 alias restart-nginx="sudo nginx -t && sudo /etc/init.d/nginx restart"
 alias upgrade="sudo apt update; sudo apt upgrade; sudo apt autoremove"
@@ -176,7 +179,7 @@ alias du='du -chs * | sort -h'
 alias rsync='rsync -rPh --info=progress2'
 EOF
 
-echo "=== Tmux"
+echo "Configuring tmux"
 cat >>~/.tmux.conf <<'EOF'
 # Remap prefix from 'C-b' to 'C-a'
 unbind C-b
@@ -198,17 +201,17 @@ set -g default-terminal "screen-256color"
 set -s escape-time 0
 EOF
 
-echo "=== .inputrc"
+echo "Updating user .inputrc"
 cat >>~/.inputrc <<'EOF'
 set editing-mode vi
 EOF
 
-echo "=== .psqlrc"
+echo "Updating user .psqlrc"
 cat >>~/.psqlrc <<'EOF'
 \x auto
 EOF
 
-echo "=== Git config"
+echo "Configuring user Git"
 git config --global user.name "$(whoami)"
 git config --global user.email "$(whoami)@$(hostname)"
 git config --global core.editor "vim"
@@ -217,7 +220,7 @@ git config --global alias.st status
 git config --global alias.co checkout
 USER_INSTALL
 
-echo "=== Restricting SSH authentication"
+echo "Restricting SSH authentication"
 SSHD_CONFIG_DIR=/etc/ssh/sshd_config.d
 SSHD_CONFIG=$SSHD_CONFIG_DIR/00-server-setup.conf
 install -d -m 755 "$SSHD_CONFIG_DIR"
