@@ -1,31 +1,32 @@
 #!/bin/sh
+set -eu
 
-apt update && apt upgrade -y
-apt install -y sudo
+: "${SUDO_USER:?Set SUDO_USER to the user to create}"
+: "${AUTHORIZED_KEY:?Set AUTHORIZED_KEY to the public key for SUDO_USER}"
 
-printf 'Enter a username for sudo user [user]: '
-IFS= read -r SUDO_USER
-SUDO_USER=${SUDO_USER:-user}
-adduser --gecos "" "$SUDO_USER"
-adduser "$SUDO_USER" sudo
-printf '%s\n' "$SUDO_USER ALL=(ALL) NOPASSWD: ALL" >"/etc/sudoers.d/$SUDO_USER"
+export DEBIAN_FRONTEND=noninteractive
+export NEEDRESTART_MODE=a
 
-_AUTH_KEYS_FILENAME=/home/$SUDO_USER/.ssh/authorized_keys
-echo
-echo "We're going to disable password-based authentication."
-echo "To copy public key from your local computer run: ssh-copy-id $SUDO_USER@your_server_ip"
-while true; do
-    if [ -s "$_AUTH_KEYS_FILENAME" ]; then
-        break
-    fi
-    echo
-    printf "There's nothing in %s at the moment. Press Enter when it's ready..." "$_AUTH_KEYS_FILENAME"
-    IFS= read -r _input
-done
-echo
+apt-get update
+apt-get -y -o Dpkg::Options::=--force-confold upgrade
+apt-get -y -o Dpkg::Options::=--force-confold install sudo
+
+adduser --disabled-password --gecos "" "$SUDO_USER"
+usermod -aG sudo "$SUDO_USER"
+
+USER_HOME=$(getent passwd "$SUDO_USER" | cut -d: -f6)
+install -d -m 700 -o "$SUDO_USER" -g "$SUDO_USER" "$USER_HOME/.ssh"
+AUTHORIZED_KEYS_PATH=$USER_HOME/.ssh/authorized_keys
+install -m 600 -o "$SUDO_USER" -g "$SUDO_USER" /dev/null "$AUTHORIZED_KEYS_PATH"
+printf '%s\n' "$AUTHORIZED_KEY" >"$AUTHORIZED_KEYS_PATH"
+
+SUDOERS_FILE=/etc/sudoers.d/$SUDO_USER
+printf '%s ALL=(ALL) NOPASSWD: ALL\n' "$SUDO_USER" >"$SUDOERS_FILE"
+chmod 440 "$SUDOERS_FILE"
+visudo -cf "$SUDOERS_FILE"
 
 echo "=== tools"
-apt install -y \
+apt-get -y -o Dpkg::Options::=--force-confold install \
     curl \
     git \
     htop \
@@ -38,7 +39,7 @@ apt install -y \
     wget
 
 echo "=== Update .bashrc"
-cat >>~/.bashrc <<EOF
+cat >>~/.bashrc <<'EOF'
 
 # vim-like command line
 set -o vi
@@ -49,9 +50,9 @@ export EDITOR="$VISUAL"
 EOF
 
 echo "=== LOCALES"
-apt install -y locales
+apt-get -y -o Dpkg::Options::=--force-confold install locales
 echo "LANG=en_DK.UTF-8" >/etc/default/locale
-cat >/etc/locale.gen <<EOF
+cat >/etc/locale.gen <<'EOF'
 en_DK.UTF-8 UTF-8
 en_US.UTF-8 UTF-8
 ru_RU.UTF-8 UTF-8
@@ -65,15 +66,15 @@ git config --global alias.st status
 git config --global alias.co checkout
 
 echo "=== VIM"
-apt install -y neovim
+apt-get -y -o Dpkg::Options::=--force-confold install neovim
 
 echo "=== .inputrc"
-cat >>~/.inputrc <<EOF
+cat >>~/.inputrc <<'EOF'
 set editing-mode vi
 EOF
 
 echo "=== Setting up $SUDO_USER"
-runuser -l "$SUDO_USER" -c 'cd && wget --no-check-certificate https://raw.github.com/imbolc/server-setup/master/bookworm/user-install.sh && sh user-install.sh'
+runuser -l "$SUDO_USER" -c 'cd && wget --no-check-certificate -O user-install.sh https://raw.github.com/imbolc/server-setup/master/bookworm/user-install.sh && sh user-install.sh'
 
 echo "=== Restricting SSH authentication"
 cat >/etc/ssh/sshd_config <<EOF
@@ -88,6 +89,7 @@ PermitRootLogin no
 # only allow ssh connections from only these users
 AllowUsers $SUDO_USER
 EOF
+/usr/sbin/sshd -t
 systemctl restart sshd.service
 
 echo

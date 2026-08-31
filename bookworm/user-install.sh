@@ -2,12 +2,14 @@
 
 echo "=== SSH"
 cd || exit 1
-mkdir .ssh
+mkdir -p .ssh
 chmod 700 .ssh
 cd .ssh || exit 1
 touch authorized_keys
 chmod 600 authorized_keys
-ssh-keygen -q -N "" < /dev/zero
+if [ ! -e id_ed25519 ]; then
+    ssh-keygen -q -t ed25519 -N "" -f id_ed25519
+fi
 
 echo "=== Update .bashrc"
 cat >>~/.bashrc <<EOF
