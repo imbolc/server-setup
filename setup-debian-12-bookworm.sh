@@ -50,16 +50,6 @@ printf '%s ALL=(ALL) NOPASSWD: ALL\n' "$SUDO_USER" >"$SUDOERS_FILE"
 chmod 440 "$SUDOERS_FILE"
 visudo -cf "$SUDOERS_FILE"
 
-echo
-echo "Open a separate terminal and verify: ssh $SUDO_USER@your_server_ip"
-while true; do
-    printf "Type 'yes' after the new login succeeds, or press Ctrl-C to abort: "
-    IFS= read -r LOGIN_CONFIRMED </dev/tty
-    if [ "$LOGIN_CONFIRMED" = yes ]; then
-        break
-    fi
-done
-
 echo "=== tools"
 apt-get -y -o Dpkg::Options::=--force-confold install \
     curl \
@@ -232,4 +222,4 @@ systemctl reload ssh.service
 echo
 echo "Everything is done, congrats :)"
 echo "Now only $SUDO_USER is allowed to access the server by ssh with only public key authorization option"
-echo "Check that you can log-in before closing this connection: ssh $SUDO_USER@your_server_ip"
+echo "Before closing this session verify that you can log in: ssh $SUDO_USER@your_server_ip"
