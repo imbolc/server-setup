@@ -3,7 +3,7 @@
 ## Run from root
 
 ```sh
-curl -fsSL https://raw.github.com/imbolc/server-setup/master/setup-bookworm.sh | sh
+curl -fsSL https://raw.github.com/imbolc/server-setup/master/setup-debian-12-bookworm.sh | sh
 ```
 
 ## Partials
