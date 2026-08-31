@@ -33,7 +33,8 @@ done
 rm -f "$AUTHORIZED_KEY_FILE"
 trap - 0
 
-CREATE_SUDO_USER=yes
+echo "Checking SSH user"
+CREATE_SSH_USER=yes
 if getent passwd "$SUDO_USER" >/dev/null; then
     if [ "$(id -u "$SUDO_USER")" -eq 0 ]; then
         echo 'The SSH sudo user cannot be root.' >&2
@@ -44,13 +45,24 @@ if getent passwd "$SUDO_USER" >/dev/null; then
         "$SUDO_USER"
     IFS= read -r REUSE_SUDO_USER </dev/tty
     case $REUSE_SUDO_USER in
-    [Yy]) CREATE_SUDO_USER=no ;;
+    [Yy]) CREATE_SSH_USER=no ;;
     *)
         echo 'Setup aborted.' >&2
         exit 1
         ;;
     esac
 fi
+
+echo "Configuring SSH user"
+if [ "$CREATE_SSH_USER" = yes ]; then
+    adduser --disabled-password --gecos "" "$SUDO_USER"
+fi
+
+USER_HOME=$(getent passwd "$SUDO_USER" | cut -d: -f6)
+install -d -m 700 -o "$SUDO_USER" -g "$SUDO_USER" "$USER_HOME/.ssh"
+AUTHORIZED_KEYS_PATH=$USER_HOME/.ssh/authorized_keys
+install -m 600 -o "$SUDO_USER" -g "$SUDO_USER" /dev/null "$AUTHORIZED_KEYS_PATH"
+printf '%s\n' "$AUTHORIZED_KEY" >"$AUTHORIZED_KEYS_PATH"
 
 export DEBIAN_FRONTEND=noninteractive
 export NEEDRESTART_MODE=a
@@ -60,17 +72,8 @@ apt-get update
 apt-get -y -o Dpkg::Options::=--force-confold upgrade
 apt-get -y -o Dpkg::Options::=--force-confold install sudo
 
-echo "Configuring sudo user"
-if [ "$CREATE_SUDO_USER" = yes ]; then
-    adduser --disabled-password --gecos "" "$SUDO_USER"
-fi
+echo "Configuring sudo access"
 usermod -aG sudo "$SUDO_USER"
-
-USER_HOME=$(getent passwd "$SUDO_USER" | cut -d: -f6)
-install -d -m 700 -o "$SUDO_USER" -g "$SUDO_USER" "$USER_HOME/.ssh"
-AUTHORIZED_KEYS_PATH=$USER_HOME/.ssh/authorized_keys
-install -m 600 -o "$SUDO_USER" -g "$SUDO_USER" /dev/null "$AUTHORIZED_KEYS_PATH"
-printf '%s\n' "$AUTHORIZED_KEY" >"$AUTHORIZED_KEYS_PATH"
 
 SUDOERS_FILE=/etc/sudoers.d/$SUDO_USER
 printf '%s ALL=(ALL) NOPASSWD: ALL\n' "$SUDO_USER" >"$SUDOERS_FILE"
