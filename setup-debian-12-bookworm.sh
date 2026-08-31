@@ -96,7 +96,7 @@ if [ ! -e id_ed25519 ]; then
 fi
 
 echo "=== Update .bashrc"
-cat >>~/.bashrc <<EOF
+cat >>~/.bashrc <<'EOF'
 
 # sudo autocomplete
 complete -cf sudo
