@@ -7,11 +7,27 @@ while [ -z "$SUDO_USER" ]; do
     IFS= read -r SUDO_USER </dev/tty
 done
 
-AUTHORIZED_KEY=
-while [ -z "$AUTHORIZED_KEY" ]; do
+AUTHORIZED_KEY_FILE=$(mktemp)
+trap 'rm -f "$AUTHORIZED_KEY_FILE"' 0
+
+while true; do
     printf 'Authorized SSH public key: '
     IFS= read -r AUTHORIZED_KEY </dev/tty
+
+    case ${AUTHORIZED_KEY%% *} in
+    ssh-* | ecdsa-* | sk-*)
+        printf '%s\n' "$AUTHORIZED_KEY" >"$AUTHORIZED_KEY_FILE"
+        if ssh-keygen -l -f "$AUTHORIZED_KEY_FILE" >/dev/null 2>&1; then
+            break
+        fi
+        ;;
+    esac
+
+    echo 'Invalid SSH public key. Paste the complete public key on one line.' >&2
 done
+
+rm -f "$AUTHORIZED_KEY_FILE"
+trap - 0
 
 export DEBIAN_FRONTEND=noninteractive
 export NEEDRESTART_MODE=a
@@ -33,6 +49,16 @@ SUDOERS_FILE=/etc/sudoers.d/$SUDO_USER
 printf '%s ALL=(ALL) NOPASSWD: ALL\n' "$SUDO_USER" >"$SUDOERS_FILE"
 chmod 440 "$SUDOERS_FILE"
 visudo -cf "$SUDOERS_FILE"
+
+echo
+echo "Open a separate terminal and verify: ssh $SUDO_USER@your_server_ip"
+while true; do
+    printf "Type 'yes' after the new login succeeds, or press Ctrl-C to abort: "
+    IFS= read -r LOGIN_CONFIRMED </dev/tty
+    if [ "$LOGIN_CONFIRMED" = yes ]; then
+        break
+    fi
+done
 
 echo "=== tools"
 apt-get -y -o Dpkg::Options::=--force-confold install \
