@@ -28,5 +28,5 @@ suggested solution.
 
 ## Git
 
-- Never ask to stage or commit anything, but after finishing a coding task,
-  suggest a commit message
+- After changes, suggest a commit message and ask if you should commit the
+  changes

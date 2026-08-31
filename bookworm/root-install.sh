@@ -94,5 +94,5 @@ systemctl restart sshd.service
 
 echo
 echo "Everything is done, congrats :)"
-echo "Now only $SUDO_USER is alowed to access the server by ssh with only public key authorization option"
+echo "Now only $SUDO_USER is allowed to access the server by ssh with only public key authorization option"
 echo "Check that you can log-in before closing this connection: ssh $SUDO_USER@your_server_ip"

@@ -1,0 +1,5 @@
+[default.extend-identifiers]
+wrk = "wrk"
+
+[default.extend-words]
+gir = "gir"

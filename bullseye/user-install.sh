@@ -29,7 +29,7 @@ cat >> ~/.bashrc << EOF
 # sudo autocomplete
 complete -cf sudo
 
-# vim-like comand line
+# vim-like command line
 set -o vi
 
 # vim as default editor
