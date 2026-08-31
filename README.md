@@ -3,9 +3,7 @@
 ## Run from root
 
 ```sh
-cd &&
-wget --no-check-certificate -O setup-bookworm.sh https://raw.github.com/imbolc/server-setup/master/setup-bookworm.sh &&
-sh setup-bookworm.sh
+curl -fsSL https://raw.github.com/imbolc/server-setup/master/setup-bookworm.sh | sh
 ```
 
 ## Partials

@@ -4,13 +4,13 @@ set -eu
 SUDO_USER=
 while [ -z "$SUDO_USER" ]; do
     printf 'Sudo username (the only user allowed to log in via SSH): '
-    IFS= read -r SUDO_USER
+    IFS= read -r SUDO_USER </dev/tty
 done
 
 AUTHORIZED_KEY=
 while [ -z "$AUTHORIZED_KEY" ]; do
     printf 'Authorized SSH public key: '
-    IFS= read -r AUTHORIZED_KEY
+    IFS= read -r AUTHORIZED_KEY </dev/tty
 done
 
 export DEBIAN_FRONTEND=noninteractive
