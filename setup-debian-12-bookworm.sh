@@ -1,6 +1,9 @@
 #!/bin/sh
 set -eu
 
+echo 'This installer is not idempotent. Do not run it twice.'
+echo
+
 SUDO_USER=
 while [ -z "$SUDO_USER" ]; do
     printf 'Sudo username (the only user allowed to log in via SSH): '
@@ -85,9 +88,8 @@ apt-get -y -o Dpkg::Options::=--force-confold install \
     wget
 
 echo "=== Update .bashrc"
-if ! grep -Fqx '# github.com/imbolc/server-setup' ~/.bashrc 2>/dev/null; then
-    cat >>~/.bashrc <<'EOF'
-# github.com/imbolc/server-setup
+cat >>~/.bashrc <<'EOF'
+
 # vim-like command line
 set -o vi
 
@@ -95,7 +97,6 @@ set -o vi
 export VISUAL=vim
 export EDITOR="$VISUAL"
 EOF
-fi
 
 echo "=== LOCALES"
 apt-get -y -o Dpkg::Options::=--force-confold install locales
@@ -117,12 +118,9 @@ echo "=== VIM"
 apt-get -y -o Dpkg::Options::=--force-confold install neovim
 
 echo "=== .inputrc"
-if ! grep -Fqx '# github.com/imbolc/server-setup' ~/.inputrc 2>/dev/null; then
-    cat >>~/.inputrc <<'EOF'
-# github.com/imbolc/server-setup
+cat >>~/.inputrc <<'EOF'
 set editing-mode vi
 EOF
-fi
 
 echo "=== Setting up $SUDO_USER"
 runuser -l "$SUDO_USER" -c 'sh -s' <<'USER_INSTALL'
@@ -139,9 +137,8 @@ if [ ! -e id_ed25519 ]; then
 fi
 
 echo "=== Update .bashrc"
-if ! grep -Fqx '# github.com/imbolc/server-setup' ~/.bashrc 2>/dev/null; then
-    cat >>~/.bashrc <<'EOF'
-# github.com/imbolc/server-setup
+cat >>~/.bashrc <<'EOF'
+
 # sudo autocomplete
 complete -cf sudo
 
@@ -157,12 +154,9 @@ if [ -d "$HOME/bin" ] ; then
     PATH="$HOME/bin:$PATH"
 fi
 EOF
-fi
 
 echo "=== Bash aliases"
-if ! grep -Fqx '# github.com/imbolc/server-setup' ~/.bash_aliases 2>/dev/null; then
-    cat >>~/.bash_aliases <<'EOF'
-# github.com/imbolc/server-setup
+cat >>~/.bash_aliases <<'EOF'
 alias restart-nginx="sudo nginx -t && sudo /etc/init.d/nginx restart"
 alias upgrade="sudo apt update; sudo apt upgrade; sudo apt autoremove"
 
@@ -181,12 +175,9 @@ alias df='df -H'
 alias du='du -chs * | sort -h'
 alias rsync='rsync -rPh --info=progress2'
 EOF
-fi
 
 echo "=== Tmux"
-if ! grep -Fqx '# github.com/imbolc/server-setup' ~/.tmux.conf 2>/dev/null; then
-    cat >>~/.tmux.conf <<'EOF'
-# github.com/imbolc/server-setup
+cat >>~/.tmux.conf <<'EOF'
 # Remap prefix from 'C-b' to 'C-a'
 unbind C-b
 set-option -g prefix C-a
@@ -206,23 +197,16 @@ set -g default-terminal "screen-256color"
 # Allows for faster key repetition
 set -s escape-time 0
 EOF
-fi
 
 echo "=== .inputrc"
-if ! grep -Fqx '# github.com/imbolc/server-setup' ~/.inputrc 2>/dev/null; then
-    cat >>~/.inputrc <<'EOF'
-# github.com/imbolc/server-setup
+cat >>~/.inputrc <<'EOF'
 set editing-mode vi
 EOF
-fi
 
 echo "=== .psqlrc"
-if ! grep -Fqx -- '-- github.com/imbolc/server-setup' ~/.psqlrc 2>/dev/null; then
-    cat >>~/.psqlrc <<'EOF'
--- github.com/imbolc/server-setup
+cat >>~/.psqlrc <<'EOF'
 \x auto
 EOF
-fi
 
 echo "=== Git config"
 git config --global user.name "$(whoami)"
