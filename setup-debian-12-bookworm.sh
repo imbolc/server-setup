@@ -64,15 +64,15 @@ AUTHORIZED_KEYS_PATH=$USER_HOME/.ssh/authorized_keys
 install -m 600 -o "$SUDO_USER" -g "$SUDO_USER" /dev/null "$AUTHORIZED_KEYS_PATH"
 printf '%s\n' "$AUTHORIZED_KEY" >"$AUTHORIZED_KEYS_PATH"
 
-export DEBIAN_FRONTEND=noninteractive
-export NEEDRESTART_MODE=a
+export DEBIAN_FRONTEND=noninteractive # Disable package prompts
+export NEEDRESTART_MODE=a             # Restart services automatically
 
 echo "Updating system"
 apt-get update
-apt-get -y -o Dpkg::Options::=--force-confold upgrade
-apt-get -y -o Dpkg::Options::=--force-confold install sudo
+apt-get -y upgrade
 
 echo "Configuring sudo access"
+apt-get -y install sudo
 usermod -aG sudo "$SUDO_USER"
 
 SUDOERS_FILE=/etc/sudoers.d/$SUDO_USER
@@ -81,7 +81,7 @@ chmod 440 "$SUDOERS_FILE"
 visudo -cf "$SUDOERS_FILE"
 
 echo "Installing tools"
-apt-get -y -o Dpkg::Options::=--force-confold install \
+apt-get -y install \
     curl \
     git \
     htop \
@@ -105,7 +105,7 @@ export EDITOR="$VISUAL"
 EOF
 
 echo "Configuring locales"
-apt-get -y -o Dpkg::Options::=--force-confold install locales
+apt-get -y install locales
 echo "LANG=en_DK.UTF-8" >/etc/default/locale
 cat >/etc/locale.gen <<'EOF'
 en_DK.UTF-8 UTF-8
@@ -121,7 +121,7 @@ git config --global alias.st status
 git config --global alias.co checkout
 
 echo "Installing Neovim"
-apt-get -y -o Dpkg::Options::=--force-confold install neovim
+apt-get -y install neovim
 
 echo "Updating root .inputrc"
 cat >>~/.inputrc <<'EOF'
