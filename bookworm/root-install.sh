@@ -74,7 +74,98 @@ set editing-mode vi
 EOF
 
 echo "=== Setting up $SUDO_USER"
-runuser -l "$SUDO_USER" -c 'cd && wget --no-check-certificate -O user-install.sh https://raw.github.com/imbolc/server-setup/master/bookworm/user-install.sh && sh user-install.sh'
+runuser -l "$SUDO_USER" -c 'sh -s' <<'USER_INSTALL'
+echo "=== SSH"
+cd || exit 1
+mkdir -p .ssh
+chmod 700 .ssh
+cd .ssh || exit 1
+touch authorized_keys
+chmod 600 authorized_keys
+if [ ! -e id_ed25519 ]; then
+    ssh-keygen -q -t ed25519 -N "" -f id_ed25519
+fi
+
+echo "=== Update .bashrc"
+cat >>~/.bashrc <<EOF
+
+# sudo autocomplete
+complete -cf sudo
+
+# vim-like command line
+set -o vi
+
+# vim as default editor
+export VISUAL=vim
+export EDITOR="$VISUAL"
+
+# set PATH so it includes user's private bin if it exists
+if [ -d "$HOME/bin" ] ; then
+    PATH="$HOME/bin:$PATH"
+fi
+EOF
+
+echo "=== Bash aliases"
+cat >>~/.bash_aliases <<EOF
+alias restart-nginx="sudo nginx -t && sudo /etc/init.d/nginx restart"
+alias upgrade="sudo apt update; sudo apt upgrade; sudo apt autoremove"
+
+# Use a long listing format
+alias ll='ls -laFh'
+
+# Show hidden files
+alias l.='ls -d .* --color=auto'
+
+alias untar='tar -zxvf'
+alias untar-bz='tar -jxvf'
+
+# System updates
+alias ls='ls --color=auto'
+alias df='df -H'
+alias du='du -chs * | sort -h'
+alias rsync='rsync -rPh --info=progress2'
+EOF
+
+echo "=== Tmux"
+cat >>~/.tmux.conf <<EOF
+# Remap prefix from 'C-b' to 'C-a'
+unbind C-b
+set-option -g prefix C-a
+bind-key C-a last-window
+bind-key C-c new-window
+
+# Disable mouse mode
+set -g mouse off
+
+# Use vi key bindings
+set -g status-keys vi
+setw -g mode-keys vi
+
+# Upgrade Terminal to 256-Color Mode
+set -g default-terminal "screen-256color"
+
+# Allows for faster key repetition
+set -s escape-time 0
+EOF
+
+echo "=== .inputrc"
+cat >>~/.inputrc <<EOF
+set editing-mode vi
+EOF
+
+echo "=== .psqlrc"
+cat >>~/.psqlrc <<EOF
+\x auto
+EOF
+
+echo "=== Git config"
+git config --global user.name "$(whoami)"
+git config --global user.email "$(whoami)@$(hostname)"
+git config --global core.editor "vim"
+git config --global alias.ci commit
+git config --global alias.st status
+git config --global alias.co checkout
+USER_INSTALL
 
 echo "=== Restricting SSH authentication"
 cat >/etc/ssh/sshd_config <<EOF
