@@ -1,8 +1,17 @@
 #!/bin/sh
 set -eu
 
-: "${SUDO_USER:?Set SUDO_USER to the user to create}"
-: "${AUTHORIZED_KEY:?Set AUTHORIZED_KEY to the public key for SUDO_USER}"
+SUDO_USER=
+while [ -z "$SUDO_USER" ]; do
+    printf 'Sudo username (the only user allowed to log in via SSH): '
+    IFS= read -r SUDO_USER
+done
+
+AUTHORIZED_KEY=
+while [ -z "$AUTHORIZED_KEY" ]; do
+    printf 'Authorized SSH public key: '
+    IFS= read -r AUTHORIZED_KEY
+done
 
 export DEBIAN_FRONTEND=noninteractive
 export NEEDRESTART_MODE=a
