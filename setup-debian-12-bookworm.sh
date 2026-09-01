@@ -148,8 +148,10 @@ git config --global alias.ci commit
 git config --global alias.st status
 git config --global alias.co checkout
 
-echo "Installing Neovim"
+echo "Installing Neovim as vim"
 apt-get -y install neovim
+install -d -m 755 /usr/local/bin
+ln -sT /usr/bin/nvim /usr/local/bin/vim
 
 echo "Updating root .inputrc"
 cat >>~/.inputrc <<'EOF'
