@@ -59,29 +59,13 @@ rm -f "$AUTHORIZED_KEY_FILE"
 trap - 0
 
 echo "Checking SSH user"
-CREATE_SSH_USER=yes
 if getent passwd "$SUDO_USER" >/dev/null; then
-    if [ "$(id -u "$SUDO_USER")" -eq 0 ]; then
-        echo 'The SSH sudo user cannot be root.' >&2
-        exit 1
-    fi
-
-    printf "User '%s' already exists. Reuse it, replace its SSH key, update its configuration, and grant passwordless sudo? [y/N]: " \
-        "$SUDO_USER"
-    IFS= read -r REUSE_SUDO_USER </dev/tty
-    case $REUSE_SUDO_USER in
-    [Yy]) CREATE_SSH_USER=no ;;
-    *)
-        echo 'Setup aborted.' >&2
-        exit 1
-        ;;
-    esac
+    echo "User '$SUDO_USER' already exists. Setup requires a new SSH user." >&2
+    exit 1
 fi
 
 echo "Configuring SSH user"
-if [ "$CREATE_SSH_USER" = yes ]; then
-    adduser --disabled-password --gecos "" "$SUDO_USER"
-fi
+adduser --disabled-password --gecos "" "$SUDO_USER"
 
 USER_HOME=$(getent passwd "$SUDO_USER" | cut -d: -f6)
 USER_GROUP=$(id -gn "$SUDO_USER")
