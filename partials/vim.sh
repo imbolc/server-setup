@@ -3,8 +3,8 @@ set -eu
 
 printf 'vim ... '
 
-sudo apt -qqq update
-sudo apt install -qqqy vim
+sudo apt-get -qqq update
+sudo apt-get install -qqqy vim
 
 vimrc=$HOME/.vimrc
 test -f "$vimrc" && echo "already exists"
@@ -32,7 +32,7 @@ set statusline=%<%f%h%m%r%=(%{&fileencoding},%{&encoding})\ (%b,0x%B)\ %l,%c%V\ 
 set laststatus=2
 
 set showcmd             " display incomplete commands
-set autoread            " automatically re-read changed files, works only in GUI
+set autoread            " automatically re-read changed files
 set autowrite           " automatically :write before running commands
 set nonumber
 set foldmethod=syntax

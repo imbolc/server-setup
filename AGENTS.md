@@ -1,4 +1,4 @@
-# Agents guideline for chat-based development
+# Agent guidelines for chat-based development
 
 Read ./README.md to understand the project goal.
 
@@ -24,7 +24,7 @@ suggested solution.
 - Write for humans - readability and simplicity are essential
 - Ask before making any optimization that makes the code more complicated or
   less readable
-- After coding tasks makes checks pass: `./.pre-commit.sh`
+- After coding tasks, make all checks pass with `./.pre-commit.sh`
 
 ## Git
 

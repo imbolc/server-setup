@@ -4,16 +4,21 @@ set -eu
 
 # Linking the script as the pre-commit hook
 SCRIPT_PATH=$(realpath "$0")
-HOOK_PATH=$(git rev-parse --git-dir)/hooks/pre-commit
+HOOK_DIRECTORY=$(git rev-parse --path-format=absolute --git-path hooks)
+HOOK_PATH=$HOOK_DIRECTORY/pre-commit
 
-if [ "$(realpath "$HOOK_PATH")" != "$SCRIPT_PATH" ]; then
-    printf "Link this script as the git pre-commit hook to avoid further manual running? (y/N): "
-    read -r link_hook
-    case "$link_hook" in
-    [Yy])
-        ln -sf "$SCRIPT_PATH" "$HOOK_PATH"
-        ;;
-    esac
+if { [ ! -e "$HOOK_DIRECTORY" ] && [ ! -L "$HOOK_DIRECTORY" ]; } ||
+    [ -d "$HOOK_DIRECTORY" ]; then
+    if [ "$(realpath -m "$HOOK_PATH")" != "$SCRIPT_PATH" ]; then
+        printf "Link this script as the git pre-commit hook to avoid further manual running? (y/N): "
+        read -r link_hook
+        case "$link_hook" in
+        [Yy])
+            mkdir -p "$HOOK_DIRECTORY"
+            ln -sf "$SCRIPT_PATH" "$HOOK_PATH"
+            ;;
+        esac
+    fi
 fi
 
 set -x
@@ -21,4 +26,4 @@ set -x
 typos --version >/dev/null 2>&1 || cargo install --locked typos-cli
 typos .
 
-find ./ -type f -name '*.sh' -print0 | xargs -0 shellcheck -ax
+git ls-files -z -- '*.sh' | xargs -0 -r shellcheck -ax --

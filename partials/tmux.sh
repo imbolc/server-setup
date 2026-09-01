@@ -3,9 +3,10 @@ set -eu
 
 printf 'tmux ... '
 
-sudo apt -qqq update
-sudo apt install -qqqy tmux
+sudo apt-get -qqq update
+sudo apt-get install -qqqy tmux
 
+# Replacing the existing tmux configuration is intentional.
 tee "$HOME/.tmux.conf" > /dev/null <<'EOF'
 unbind C-b
 set-option -g prefix C-a

@@ -11,36 +11,36 @@
 All partials
 
 ```sh
-curl -fsSL https://raw.github.com/imbolc/server-setup/master/partials/all.sh | sh
+(setup=$(curl -fsSL https://raw.github.com/imbolc/server-setup/master/partials/all.sh) && sh -c "$setup")
 ```
 
 all partials for root from a sudo user
 
 ```sh
-curl -fsSL https://raw.github.com/imbolc/server-setup/master/partials/all.sh | sudo sh
+(setup=$(curl -fsSL https://raw.github.com/imbolc/server-setup/master/partials/all.sh) && sudo sh -c "$setup")
 ```
 
 - essential cli tools
   ```sh
-  curl -fsSL https://raw.github.com/imbolc/server-setup/master/partials/tools.sh | sh
+  (setup=$(curl -fsSL https://raw.github.com/imbolc/server-setup/master/partials/tools.sh) && sh -c "$setup")
   ```
 - common bash aliases
   ```sh
-  curl -fsSL https://raw.github.com/imbolc/server-setup/master/partials/aliases.sh | sh
+  (setup=$(curl -fsSL https://raw.github.com/imbolc/server-setup/master/partials/aliases.sh) && sh -c "$setup")
   ```
 - vimification
   ```sh
-  curl -fsSL https://raw.github.com/imbolc/server-setup/master/partials/vimification.sh | sh
+  (setup=$(curl -fsSL https://raw.github.com/imbolc/server-setup/master/partials/vimification.sh) && sh -c "$setup")
   ```
 - vim
   ```sh
-  curl -fsSL https://raw.github.com/imbolc/server-setup/master/partials/vim.sh | sh
+  (setup=$(curl -fsSL https://raw.github.com/imbolc/server-setup/master/partials/vim.sh) && sh -c "$setup")
   ```
 - tmux
   ```sh
-  curl -fsSL https://raw.github.com/imbolc/server-setup/master/partials/tmux.sh | sh
+  (setup=$(curl -fsSL https://raw.github.com/imbolc/server-setup/master/partials/tmux.sh) && sh -c "$setup")
   ```
 - git
   ```sh
-  curl -fsSL https://raw.github.com/imbolc/server-setup/master/partials/git.sh | sh
+  (setup=$(curl -fsSL https://raw.github.com/imbolc/server-setup/master/partials/git.sh) && sh -c "$setup")
   ```

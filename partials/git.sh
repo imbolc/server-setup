@@ -3,8 +3,8 @@ set -eu
 
 printf 'git ... '
 
-sudo apt -qqq update
-sudo apt install -qqqy git
+sudo apt-get -qqq update
+sudo apt-get install -qqqy git
 
 git config --global core.editor "vim"
 git config --global alias.ci commit

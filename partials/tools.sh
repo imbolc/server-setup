@@ -3,10 +3,9 @@ set -eu
 
 printf 'essential tools ... '
 
-sudo apt -qqq update
-sudo apt -qqqy upgrade
+sudo apt-get -qqq update
 
-sudo apt install -qqqy \
+sudo apt-get install -qqqy \
   curl \
   htop \
   iotop \
