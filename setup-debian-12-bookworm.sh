@@ -18,7 +18,7 @@ if getent passwd "$SUDO_USER" >/dev/null; then
 fi
 
 echo "Configuring SSH user"
-adduser --disabled-password --gecos "" "$SUDO_USER"
+adduser --disabled-password --comment "" "$SUDO_USER"
 
 USER_HOME=$(getent passwd "$SUDO_USER" | cut -d: -f6)
 USER_GROUP=$(id -gn "$SUDO_USER")
