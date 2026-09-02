@@ -10,14 +10,19 @@ HOOK_PATH=$HOOK_DIRECTORY/pre-commit
 if { [ ! -e "$HOOK_DIRECTORY" ] && [ ! -L "$HOOK_DIRECTORY" ]; } ||
     [ -d "$HOOK_DIRECTORY" ]; then
     if [ "$(realpath -m "$HOOK_PATH")" != "$SCRIPT_PATH" ]; then
-        printf "Link this script as the git pre-commit hook to avoid further manual running? (y/N): "
-        read -r link_hook
-        case "$link_hook" in
-        [Yy])
-            mkdir -p "$HOOK_DIRECTORY"
-            ln -sf "$SCRIPT_PATH" "$HOOK_PATH"
-            ;;
-        esac
+        if [ -e "$HOOK_PATH" ] || [ -L "$HOOK_PATH" ]; then
+            printf 'Existing pre-commit hook left unchanged: %s\n' "$HOOK_PATH"
+        else
+            printf "Link this script as the git pre-commit hook to avoid further manual running? (y/N): "
+            if read -r link_hook; then
+                case "$link_hook" in
+                [Yy])
+                    mkdir -p "$HOOK_DIRECTORY"
+                    ln -s "$SCRIPT_PATH" "$HOOK_PATH"
+                    ;;
+                esac
+            fi
+        fi
     fi
 fi
 
@@ -26,4 +31,4 @@ set -x
 typos --version >/dev/null 2>&1 || cargo install --locked typos-cli
 typos .
 
-git ls-files -z -- '*.sh' | xargs -0 -r shellcheck -ax --
+git grep -Ilz -e '' -- '*.sh' | xargs -0 -r shellcheck -ax --

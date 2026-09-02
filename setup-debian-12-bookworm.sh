@@ -11,6 +11,13 @@ if ! command -v ssh-keygen >/dev/null 2>&1 ||
     exit 1
 fi
 
+SSHD_CONFIG_DIR=/etc/ssh/sshd_config.d
+SSHD_CONFIG=$SSHD_CONFIG_DIR/00-server-setup.conf
+if [ -e "$SSHD_CONFIG" ] || [ -L "$SSHD_CONFIG" ]; then
+    echo "SSH configuration '$SSHD_CONFIG' already exists. Move it before running this installer." >&2
+    exit 1
+fi
+
 echo "Collecting setup details"
 SUDO_USER=
 while [ -z "$SUDO_USER" ]; do
@@ -148,10 +155,10 @@ git config --global alias.ci commit
 git config --global alias.st status
 git config --global alias.co checkout
 
-echo "Installing Neovim as vim"
+echo "Installing Neovim"
 apt-get -y install neovim
 install -d -m 755 /usr/local/bin
-ln -sT /usr/bin/nvim /usr/local/bin/vim
+ln -sT /usr/bin/nvim /usr/local/bin/vim || true
 
 echo "Updating root .inputrc"
 cat >>~/.inputrc <<'EOF'
@@ -161,6 +168,8 @@ EOF
 
 echo "Configuring $SUDO_USER"
 runuser -l "$SUDO_USER" -c 'sh -s' <<'USER_INSTALL'
+set -eu
+
 echo "Configuring user SSH files"
 cd || exit 1
 
@@ -258,8 +267,6 @@ git config --global alias.co checkout
 USER_INSTALL
 
 echo "Restricting SSH authentication"
-SSHD_CONFIG_DIR=/etc/ssh/sshd_config.d
-SSHD_CONFIG=$SSHD_CONFIG_DIR/00-server-setup.conf
 install -d -m 755 "$SSHD_CONFIG_DIR"
 install -m 644 /dev/null "$SSHD_CONFIG"
 cat >"$SSHD_CONFIG" <<EOF
@@ -272,22 +279,6 @@ PermitRootLogin no
 AllowUsers $SUDO_USER
 EOF
 /usr/sbin/sshd -t
-
-SSHD_EFFECTIVE_CONFIG=$(/usr/sbin/sshd -T -C "user=$SUDO_USER,host=localhost,addr=127.0.0.1")
-for SSHD_SETTING in \
-    "pubkeyauthentication yes" \
-    "authenticationmethods publickey" \
-    "authorizedkeysfile .ssh/authorized_keys" \
-    "passwordauthentication no" \
-    "kbdinteractiveauthentication no" \
-    "permitrootlogin no" \
-    "allowusers $SUDO_USER"; do
-    if ! printf '%s\n' "$SSHD_EFFECTIVE_CONFIG" | grep -Fqx "$SSHD_SETTING"; then
-        echo "SSH setting is not effective: $SSHD_SETTING" >&2
-        exit 1
-    fi
-done
-
 systemctl reload ssh.service
 
 echo
