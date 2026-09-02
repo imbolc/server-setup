@@ -4,66 +4,12 @@ set -eu
 echo 'This installer is not idempotent. Do not run it twice.'
 echo
 
-if ! command -v ssh-keygen >/dev/null 2>&1 ||
-    [ ! -x /usr/sbin/sshd ] ||
-    ! systemctl is-active --quiet ssh.service; then
-    echo 'Install openssh-server and start ssh.service before running this installer.' >&2
-    exit 1
-fi
-
-SSHD_CONFIG_DIR=/etc/ssh/sshd_config.d
-SSHD_CONFIG=$SSHD_CONFIG_DIR/00-server-setup.conf
-if [ -e "$SSHD_CONFIG" ] || [ -L "$SSHD_CONFIG" ]; then
-    echo "SSH configuration '$SSHD_CONFIG' already exists. Move it before running this installer." >&2
-    exit 1
-fi
-
 echo "Collecting setup details"
-SUDO_USER=
-while [ -z "$SUDO_USER" ]; do
-    printf 'Sudo username (the only user allowed to log in via SSH): '
-    IFS= read -r SUDO_USER </dev/tty
-done
+printf 'Sudo username (the only user allowed to log in via SSH): '
+IFS= read -r SUDO_USER </dev/tty
 
-key_type_is_accepted() {
-    case $1 in
-    ssh-rsa)
-        KEY_SIGNATURE_ALGORITHMS='rsa-sha2-512 rsa-sha2-256 ssh-rsa'
-        ;;
-    *) KEY_SIGNATURE_ALGORITHMS=$1 ;;
-    esac
-
-    for KEY_SIGNATURE_ALGORITHM in $KEY_SIGNATURE_ALGORITHMS; do
-        case ,$SSHD_PUBKEY_ACCEPTED_ALGORITHMS, in
-        *,"$KEY_SIGNATURE_ALGORITHM",*) return 0 ;;
-        esac
-    done
-
-    return 1
-}
-
-AUTHORIZED_KEY_FILE=$(mktemp)
-trap 'rm -f "$AUTHORIZED_KEY_FILE"' 0
-
-while true; do
-    printf 'Authorized SSH public key: '
-    IFS= read -r AUTHORIZED_KEY </dev/tty
-
-    case ${AUTHORIZED_KEY%% *} in
-    ssh-dss | *-cert-*) ;;
-    ssh-* | ecdsa-* | sk-*)
-        printf '%s\n' "$AUTHORIZED_KEY" >"$AUTHORIZED_KEY_FILE"
-        if ssh-keygen -l -f "$AUTHORIZED_KEY_FILE" >/dev/null 2>&1; then
-            break
-        fi
-        ;;
-    esac
-
-    echo 'Invalid SSH public key. Paste the complete public key on one line.' >&2
-done
-
-rm -f "$AUTHORIZED_KEY_FILE"
-trap - 0
+printf 'Authorized SSH public key: '
+IFS= read -r AUTHORIZED_KEY </dev/tty
 
 echo "Checking SSH user"
 if getent passwd "$SUDO_USER" >/dev/null; then
@@ -78,6 +24,8 @@ USER_HOME=$(getent passwd "$SUDO_USER" | cut -d: -f6)
 USER_GROUP=$(id -gn "$SUDO_USER")
 install -d -m 700 -o "$SUDO_USER" -g "$USER_GROUP" "$USER_HOME/.ssh"
 AUTHORIZED_KEYS_PATH=$USER_HOME/.ssh/authorized_keys
+install -m 600 -o "$SUDO_USER" -g "$USER_GROUP" /dev/null "$AUTHORIZED_KEYS_PATH"
+printf '%s\n' "$AUTHORIZED_KEY" >"$AUTHORIZED_KEYS_PATH"
 
 export DEBIAN_FRONTEND=noninteractive # Disable package prompts
 export NEEDRESTART_MODE=a             # Restart services automatically
@@ -89,26 +37,6 @@ apt-get -y upgrade
 echo "Configuring sudo access"
 apt-get -y install sudo
 usermod -aG sudo "$SUDO_USER"
-
-echo "Validating SSH public key compatibility"
-CURRENT_SSHD_EFFECTIVE_CONFIG=$(
-    /usr/sbin/sshd -T -C "user=$SUDO_USER,host=localhost,addr=127.0.0.1"
-)
-SSHD_PUBKEY_ACCEPTED_ALGORITHMS=$(
-    printf '%s\n' "$CURRENT_SSHD_EFFECTIVE_CONFIG" |
-        sed -n 's/^pubkeyacceptedalgorithms //p'
-)
-if [ -z "$SSHD_PUBKEY_ACCEPTED_ALGORITHMS" ]; then
-    echo 'Could not determine the SSH server accepted public-key algorithms.' >&2
-    exit 1
-fi
-if ! key_type_is_accepted "${AUTHORIZED_KEY%% *}"; then
-    echo 'The SSH public key type is not accepted by the effective SSH configuration.' >&2
-    exit 1
-fi
-
-install -m 600 -o "$SUDO_USER" -g "$USER_GROUP" /dev/null "$AUTHORIZED_KEYS_PATH"
-printf '%s\n' "$AUTHORIZED_KEY" >"$AUTHORIZED_KEYS_PATH"
 
 SUDOERS_FILE=/etc/sudoers.d/$SUDO_USER
 printf '%s ALL=(ALL) NOPASSWD: ALL\n' "$SUDO_USER" >"$SUDOERS_FILE"
@@ -171,11 +99,11 @@ runuser -l "$SUDO_USER" -c 'sh -s' <<'USER_INSTALL'
 set -eu
 
 echo "Configuring user SSH files"
-cd || exit 1
+cd
 
 mkdir -p .ssh
 chmod 700 .ssh
-cd .ssh || exit 1
+cd .ssh
 touch authorized_keys
 chmod 600 authorized_keys
 if [ ! -e id_ed25519 ]; then
@@ -267,7 +195,8 @@ git config --global alias.co checkout
 USER_INSTALL
 
 echo "Restricting SSH authentication"
-install -d -m 755 "$SSHD_CONFIG_DIR"
+SSHD_CONFIG=/etc/ssh/sshd_config.d/00-server-setup.conf
+install -d -m 755 /etc/ssh/sshd_config.d
 install -m 644 /dev/null "$SSHD_CONFIG"
 cat >"$SSHD_CONFIG" <<EOF
 PubkeyAuthentication yes

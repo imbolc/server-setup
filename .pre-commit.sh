@@ -7,22 +7,15 @@ SCRIPT_PATH=$(realpath "$0")
 HOOK_DIRECTORY=$(git rev-parse --path-format=absolute --git-path hooks)
 HOOK_PATH=$HOOK_DIRECTORY/pre-commit
 
-if { [ ! -e "$HOOK_DIRECTORY" ] && [ ! -L "$HOOK_DIRECTORY" ]; } ||
-    [ -d "$HOOK_DIRECTORY" ]; then
-    if [ "$(realpath -m "$HOOK_PATH")" != "$SCRIPT_PATH" ]; then
-        if [ -e "$HOOK_PATH" ] || [ -L "$HOOK_PATH" ]; then
-            printf 'Existing pre-commit hook left unchanged: %s\n' "$HOOK_PATH"
-        else
-            printf "Link this script as the git pre-commit hook to avoid further manual running? (y/N): "
-            if read -r link_hook; then
-                case "$link_hook" in
-                [Yy])
-                    mkdir -p "$HOOK_DIRECTORY"
-                    ln -s "$SCRIPT_PATH" "$HOOK_PATH"
-                    ;;
-                esac
-            fi
-        fi
+if [ ! -e "$HOOK_PATH" ] && [ ! -L "$HOOK_PATH" ]; then
+    printf "Link this script as the git pre-commit hook to avoid further manual running? (y/N): "
+    if read -r link_hook; then
+        case "$link_hook" in
+        [Yy])
+            mkdir -p "$HOOK_DIRECTORY"
+            ln -s "$SCRIPT_PATH" "$HOOK_PATH"
+            ;;
+        esac
     fi
 fi
 
