@@ -1,7 +1,7 @@
-# A common server setup
+# Base server setup
 
-## Run from root
+For Debian 12 Bookworm and Debian 13 Trixie, run as the root user:
 
 ```sh
-(setup=$(curl -fsSL https://raw.github.com/imbolc/server-setup/master/setup-debian-12-bookworm.sh) && sh -c "$setup")
+(setup=$(curl -fsSL https://raw.github.com/imbolc/server-setup/master/debian-12-13.sh) && sh -c "$setup")
 ```
