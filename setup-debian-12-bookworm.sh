@@ -77,12 +77,6 @@ ru_RU.UTF-8 UTF-8
 EOF
 /usr/sbin/locale-gen
 
-echo "Configuring root Git"
-git config --global core.editor "vim"
-git config --global alias.ci commit
-git config --global alias.st status
-git config --global alias.co checkout
-
 echo "Installing Neovim"
 apt-get -y install neovim
 install -d -m 755 /usr/local/bin
@@ -137,9 +131,6 @@ alias upgrade="sudo apt update && sudo apt upgrade && sudo apt autoremove"
 
 # Use a long listing format
 alias ll='ls -laFh'
-
-# Show hidden files
-alias l.='ls -d .* --color=auto'
 
 alias untar='tar -zxvf'
 alias untar-bz='tar -jxvf'
